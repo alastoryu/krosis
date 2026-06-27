@@ -1,0 +1,6 @@
+-- Acesso (OAuth? talvez com Keycloak)
+-- Role-Based Access Control (RBAC)
+-- Swagger
+-- Flyway
+--
+

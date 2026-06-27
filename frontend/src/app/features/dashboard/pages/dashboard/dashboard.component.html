@@ -1,0 +1,45 @@
+<div class="dashboard">
+
+  <h2>Dashboard</h2>
+
+  <div *ngIf="loading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div class="cards" *ngIf="!loading">
+
+    <mat-card class="card produtos">
+      <mat-icon>inventory</mat-icon>
+      <div>
+        <h3>{{ totalProdutos }}</h3>
+        <p>Produtos</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="card categorias">
+      <mat-icon>category</mat-icon>
+      <div>
+        <h3>{{ totalCategorias }}</h3>
+        <p>Categorias</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="card fabricantes">
+      <mat-icon>factory</mat-icon>
+      <div>
+        <h3>{{ totalFabricantes }}</h3>
+        <p>Fabricantes</p>
+      </div>
+    </mat-card>
+
+    <mat-card class="card usuarios">
+      <mat-icon>people</mat-icon>
+      <div>
+        <h3>{{ totalUsuarios }}</h3>
+        <p>Usuários</p>
+      </div>
+    </mat-card>
+
+  </div>
+
+</div>

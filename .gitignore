@@ -1,0 +1,62 @@
+############################
+# SISTEMA / IDE
+############################
+.idea/
+.vscode/
+*.iml
+*.log
+.DS_Store
+Thumbs.db
+
+############################
+# FRONTEND (Angular)
+############################
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.cache/
+frontend/.vscode/
+
+############################
+# BACKEND (Java / Spring Boot)
+############################
+backend/mvnw.cmd
+backend/mvnw
+backend/target/
+backend/.idea/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.metadata/
+backend/.mvn/
+
+############################
+# JAVA / MAVEN
+############################
+*.class
+*.jar
+*.war
+
+############################
+# SISTEMA OPERACIONAL
+############################
+.DS_Store
+Thumbs.db
+
+############################
+# VARIÁVEIS / CONFIGS LOCAIS
+############################
+.env
+application-local.properties
+
+############################
+# LOGS
+############################
+*.log
+logs/
+
+############################
+# BUILD
+############################
+build/
+out/

@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 8px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.usuario-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.checkbox-container {
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+}

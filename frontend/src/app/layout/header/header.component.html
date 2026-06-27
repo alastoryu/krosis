@@ -1,0 +1,80 @@
+<header class="header">
+  <mat-toolbar>
+    <div>
+      <span>Krosis</span>
+    </div>
+
+    <div>
+      <button mat-button routerLink="/dashboard">
+        Dashboard
+      </button>
+      <button mat-button [matMenuTriggerFor]="prevencaoMenu">
+        Prevenção
+      </button>
+      <button mat-button [matMenuTriggerFor]="cadastroMenu">
+        Cadastro
+      </button>
+      <button mat-button [matMenuTriggerFor]="relatorioMenu">
+        Relatório
+      </button>
+      <button mat-button>
+        Configuração
+      </button>
+
+      <mat-menu #cadastroMenu="matMenu">
+        <button mat-menu-item routerLink="/produtos">
+          Produtos
+        </button>
+
+        <button mat-menu-item routerLink="/categorias">
+          Categorias
+        </button>
+
+        <button mat-menu-item routerLink="/fabricantes">
+          Fabricantes
+        </button>
+
+        <button mat-menu-item routerLink="/usuarios">
+          Usuários
+        </button>
+      </mat-menu>
+
+      <mat-menu #prevencaoMenu="matMenu">
+        <button mat-menu-item routerLink="/lotes">
+          Lotes
+        </button>
+
+        <button mat-menu-item routerLink="/estoques">
+          Estoques
+        </button>
+      </mat-menu>
+
+      <mat-menu #relatorioMenu="matMenu">
+        <button mat-menu-item routerLink="/relatorio-vencimento">
+          Vencimento
+        </button>
+
+        <button mat-menu-item routerLink="/relatorio-estoque">
+          Estoque
+        </button>
+      </mat-menu>
+    </div>
+
+    <div>
+      <button mat-button [matMenuTriggerFor]="usuarioMenu" class="user">
+        <span>Usuário</span>
+        <mat-icon>person</mat-icon>
+      </button>
+
+      <mat-menu #usuarioMenu="matMenu">
+        <button mat-menu-item routerLink="/relatorio-vencimento">
+          Perfil
+        </button>
+
+        <button mat-menu-item routerLink="/relatorio-estoque">
+          Sair
+        </button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+</header>

@@ -1,0 +1,75 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: #777;
+}
+
+.empty mat-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+/* STATUS BADGE */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.status.active {
+  background: #e6f4ea;
+  color: #1e8e3e;
+}
+
+.status.inactive {
+  background: #fbe9e7;
+  color: #d93025;
+}
+
+/* ROLE BADGE */
+.role {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  background: #eef2ff;
+  color: #3f51b5;
+}

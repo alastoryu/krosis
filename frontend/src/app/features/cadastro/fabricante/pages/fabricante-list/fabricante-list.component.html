@@ -1,0 +1,213 @@
+<!-- fabricante-list.component.html -->
+<div class="container">
+  <mat-card class="list-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>business</mat-icon>
+        Fabricantes
+      </mat-card-title>
+
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="novoFabricante()">
+          <mat-icon>add</mat-icon>
+          Novo Fabricante
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- Filtros -->
+      <div class="filters-container">
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Buscar por nome</mat-label>
+          <input matInput
+                 [(ngModel)]="filtroNome"
+                 (keyup.enter)="carregarFabricantes()"
+                 placeholder="Digite o nome do fabricante...">
+
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>País de Origem</mat-label>
+          <input matInput
+                 [(ngModel)]="filtroPaisOrigem"
+                 (keyup.enter)="carregarFabricantes()"
+                 placeholder="Ex.: Brasil">
+        </mat-form-field>
+
+        <button mat-raised-button
+                (click)="carregarFabricantes()"
+                [disabled]="loading">
+          <mat-icon>search</mat-icon>
+          Buscar
+        </button>
+
+        <button mat-button
+                (click)="limparFiltros()"
+                [disabled]="loading">
+          <mat-icon>clear</mat-icon>
+          Limpar
+        </button>
+
+      </div>
+
+      <!-- Informações -->
+      <div class="pagination-info"
+           *ngIf="!loading && totalElements > 0">
+        <span>
+          Mostrando {{ dataSource.data.length }}
+          de {{ totalElements }} fabricantes
+        </span>
+      </div>
+
+      <!-- Tabela -->
+      <div class="table-container">
+
+        <mat-table [dataSource]="dataSource"
+                   matSort
+                   class="fabricantes-table">
+
+          <!-- ID -->
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              ID
+            </mat-header-cell>
+
+            <mat-cell *matCellDef="let fabricante">
+              {{ fabricante.id }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Nome -->
+          <ng-container matColumnDef="nome">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Nome
+            </mat-header-cell>
+
+            <mat-cell *matCellDef="let fabricante">
+              <div>
+                <strong>{{ fabricante.nome }}</strong>
+
+                <div *ngIf="fabricante.descricao"
+                     class="descricao">
+                  {{ fabricante.descricao }}
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <!-- País -->
+          <ng-container matColumnDef="paisOrigem">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              País de Origem
+            </mat-header-cell>
+
+            <mat-cell *matCellDef="let fabricante">
+              {{ fabricante.paisOrigem || '-' }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="ativo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Status
+            </mat-header-cell>
+
+            <mat-cell *matCellDef="let fabricante">
+              <mat-chip-set>
+                <mat-chip
+                  [class.ativo]="fabricante.ativo"
+                  [class.inativo]="!fabricante.ativo">
+
+                  {{ fabricante.ativo ? 'Ativo' : 'Inativo' }}
+
+                </mat-chip>
+              </mat-chip-set>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Ações -->
+          <ng-container matColumnDef="acoes">
+            <mat-header-cell *matHeaderCellDef>
+              Ações
+            </mat-header-cell>
+
+            <mat-cell *matCellDef="let fabricante">
+
+              <button mat-icon-button
+                      color="primary"
+                      (click)="editarFabricante(fabricante)"
+                      matTooltip="Editar fabricante">
+
+                <mat-icon>edit</mat-icon>
+
+              </button>
+
+              <button mat-icon-button
+                      color="warn"
+                      (click)="excluirFabricante(fabricante)"
+                      matTooltip="Excluir fabricante">
+
+                <mat-icon>delete</mat-icon>
+
+              </button>
+
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </mat-table>
+
+        <!-- Sem dados -->
+        <div *ngIf="!loading && dataSource.data.length === 0"
+             class="no-data">
+
+          <mat-icon>business</mat-icon>
+
+          <h3>Nenhum fabricante encontrado</h3>
+
+          <p>Comece adicionando um novo fabricante</p>
+
+          <button mat-raised-button
+                  color="primary"
+                  (click)="novoFabricante()">
+
+            <mat-icon>add</mat-icon>
+            Adicionar Fabricante
+
+          </button>
+
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="loading" class="loading">
+
+          <mat-icon class="loading-icon">
+            hourglass_empty
+          </mat-icon>
+
+          <p>Carregando fabricantes...</p>
+
+        </div>
+
+      </div>
+
+      <!-- Paginação -->
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5,10,20,50]"
+        showFirstLastButtons
+        aria-label="Selecione a página dos fabricantes">
+
+      </mat-paginator>
+
+    </mat-card-content>
+  </mat-card>
+</div>

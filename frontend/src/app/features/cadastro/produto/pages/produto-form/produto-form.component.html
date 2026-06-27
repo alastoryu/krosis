@@ -1,0 +1,73 @@
+<div class="container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+        {{ isEditMode ? 'Editar Produto' : 'Novo Produto' }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()" class="produto-form">
+
+        <!-- Nome -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome do Produto</mat-label>
+          <input matInput formControlName="nome" placeholder="Digite o nome do produto">
+        </mat-form-field>
+
+        <!-- Descrição -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput formControlName="descricao" rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Código de Barras -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Código de Barras</mat-label>
+          <input matInput formControlName="codigoDeBarras" maxlength="13">
+        </mat-form-field>
+
+        <!-- Categoria (OBJETO) -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Categoria</mat-label>
+          <mat-select formControlName="categoria">
+            <mat-option *ngFor="let cat of categorias" [value]="cat">
+              {{ cat.nome }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Fabricante (OBJETO) -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Fabricante</mat-label>
+          <mat-select formControlName="fabricante">
+            <mat-option *ngFor="let fab of fabricantes" [value]="fab">
+              {{ fab.nome }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Ativo -->
+        <div class="checkbox-container">
+          <mat-checkbox formControlName="ativo">
+            Produto ativo
+          </mat-checkbox>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button (click)="onCancel()">Cancelar</button>
+
+      <button mat-raised-button color="primary"
+              (click)="onSubmit()"
+              [disabled]="loading || produtoForm.invalid">
+
+        {{ isEditMode ? 'Atualizar' : 'Salvar' }}
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+</div>

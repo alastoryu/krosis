@@ -1,0 +1,103 @@
+<div class="container">
+
+  <mat-card class="card">
+
+    <!-- HEADER -->
+    <mat-card-header class="header">
+      <mat-card-title class="title">
+        <mat-icon>people</mat-icon>
+        Usuários
+      </mat-card-title>
+
+      <div class="spacer"></div>
+
+      <button mat-raised-button color="primary" routerLink="/usuarios/novo">
+        <mat-icon>add</mat-icon>
+        Novo Usuário
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- EMPTY STATE -->
+      <div class="empty" *ngIf="!usuarios || usuarios.length === 0">
+        <mat-icon>person_off</mat-icon>
+        <p>Nenhum usuário encontrado</p>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-container" *ngIf="usuarios?.length">
+
+        <table mat-table [dataSource]="usuarios" class="mat-elevation-z2 full-width">
+
+          <!-- ID -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let u">{{ u.id }}</td>
+          </ng-container>
+
+          <!-- Nome -->
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef>Nome</th>
+            <td mat-cell *matCellDef="let u">{{ u.nome }}</td>
+          </ng-container>
+
+          <!-- Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let u">{{ u.email }}</td>
+          </ng-container>
+
+          <!-- Role -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Perfil</th>
+            <td mat-cell *matCellDef="let u">
+              <span class="role" [ngClass]="u.role">
+                {{ u.role }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Ativo -->
+          <ng-container matColumnDef="ativo">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let u">
+
+              <span class="status" [ngClass]="u.ativo ? 'active' : 'inactive'">
+                <mat-icon>
+                  {{ u.ativo ? 'check_circle' : 'cancel' }}
+                </mat-icon>
+                {{ u.ativo ? 'Ativo' : 'Inativo' }}
+              </span>
+
+            </td>
+          </ng-container>
+
+          <!-- Ações -->
+          <ng-container matColumnDef="acoes">
+            <th mat-header-cell *matHeaderCellDef>Ações</th>
+            <td mat-cell *matCellDef="let u">
+
+              <button mat-icon-button [routerLink]="['/usuarios/editar', u.id]">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button color="warn" (click)="deletar(u.id!)">
+                <mat-icon>delete</mat-icon>
+              </button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

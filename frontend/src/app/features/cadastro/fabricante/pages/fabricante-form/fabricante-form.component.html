@@ -1,0 +1,95 @@
+<div class="container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+        {{ isEditMode ? 'Editar Fabricante' : 'Novo Fabricante' }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="fabricanteForm"
+            (ngSubmit)="onSubmit()"
+            class="fabricante-form">
+
+        <!-- Nome -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome</mat-label>
+          <input matInput
+                 formControlName="nome"
+                 placeholder="Digite o nome do fabricante">
+
+          <mat-error *ngIf="nome?.hasError('required')">
+            Nome é obrigatório
+          </mat-error>
+
+          <mat-error *ngIf="nome?.hasError('minlength')">
+            Nome deve ter pelo menos 2 caracteres
+          </mat-error>
+
+          <mat-error *ngIf="nome?.hasError('maxlength')">
+            Nome deve ter no máximo 150 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Descrição -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput
+                    formControlName="descricao"
+                    placeholder="Digite uma descrição para o fabricante"
+                    rows="4">
+          </textarea>
+
+          <mat-hint align="end">
+            {{ fabricanteForm.get('descricao')?.value?.length || 0 }}/500
+          </mat-hint>
+        </mat-form-field>
+
+        <!-- País de Origem -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>País de Origem</mat-label>
+          <input matInput
+                 formControlName="paisOrigem"
+                 placeholder="Ex.: Brasil, Alemanha, Japão">
+
+          <mat-error *ngIf="paisOrigem?.hasError('maxlength')">
+            País deve ter no máximo 100 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Ativo -->
+        <div class="checkbox-container">
+          <mat-checkbox formControlName="ativo">
+            Fabricante ativo
+          </mat-checkbox>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="card-actions">
+      <button mat-button
+              type="button"
+              (click)="onCancel()"
+              [disabled]="loading">
+
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+
+      <button mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="loading || fabricanteForm.invalid"
+              (click)="onSubmit()">
+
+        <mat-icon>
+          {{ loading ? 'hourglass_empty' : 'save' }}
+        </mat-icon>
+
+        {{ loading ? 'Salvando...' : (isEditMode ? 'Atualizar' : 'Salvar') }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,12 +1,93 @@
-.footer {
-  height: 50px;
-  background: #1976d2;
-  color: white;
+$bg:     #0f1923;
+$accent: #4fc3f7;
+
+:host { display: block; }
+
+.footer-bar {
+  background: $bg;
+  border-top: 1px solid rgba($accent, .1);
+  height: 48px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding: 0 1.25rem;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 1000;
+}
+
+// ── esquerda ───────────────────────────────────────────────────────────────
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.footer-icon {
+  width: 22px;
+  height: 22px;
+  background: rgba($accent, .1);
+  border: 1px solid rgba($accent, .2);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+    color: $accent;
+  }
+}
+
+.footer-brand {
+  font-size: .78rem;
+  font-weight: 700;
+  color: rgba(#fff, .5);
+  letter-spacing: -.1px;
+}
+
+.footer-sep {
+  width: 1px;
+  height: 12px;
+  background: rgba(#fff, .1);
+  margin: 0 .5rem;
+}
+
+.footer-copy {
+  font-size: .75rem;
+  color: rgba(#fff, .3);
+}
+
+// ── direita ────────────────────────────────────────────────────────────────
+.footer-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.footer-link {
+  font-size: .75rem;
+  color: rgba(#fff, .3);
+  text-decoration: none;
+  transition: color .15s;
+
+  &:hover { color: rgba($accent, .8); }
+}
+
+.footer-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(#fff, .15);
+}
+
+.footer-version {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: rgba($accent, .4);
 }

@@ -23,7 +23,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ProdutoService, Produto, ProdutoFiltro } from '../../services/produto.service';
 import { Categoria, CategoriaService } from '../../../categoria/services/categoria.service';
 import { Fabricante, FabricanteService } from '../../../fabricante/services/fabricante.service';
-import { Page } from '../../../../../core/models/Page';
+import { Page } from '../../../../../core/models/page.model';
 
 @Component({
   selector: 'app-produto-lista',

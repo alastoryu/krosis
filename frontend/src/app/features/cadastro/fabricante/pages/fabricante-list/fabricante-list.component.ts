@@ -25,7 +25,7 @@ import {
   Fabricante,
   FabricanteFiltro
 } from '../../services/fabricante.service';
-import { Page } from '../../../../../core/models/Page';
+import { Page } from '../../../../../core/models/page.model';
 
 @Component({
   selector: 'app-fabricante-lista',

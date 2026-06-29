@@ -1,0 +1,74 @@
+<div class="login-page">
+
+    <div class="brand-panel" aria-hidden="true">
+        <div class="brand-content">
+            <div class="brand-icon">
+                <mat-icon>inventory_2</mat-icon>
+            </div>
+            <h1 class="brand-name">Krosis</h1>
+            <p class="brand-tagline">Gestão de estoque<br>sem complicação</p>
+
+            <ul class="brand-features">
+                <li><mat-icon>check_circle</mat-icon> Controle de produtos e categorias</li>
+                <li><mat-icon>check_circle</mat-icon> Gestão de fabricantes</li>
+                <li><mat-icon>check_circle</mat-icon> Acesso por perfil de usuário</li>
+            </ul>
+        </div>
+
+        <div class="geo geo-1"></div>
+        <div class="geo geo-2"></div>
+        <div class="geo geo-3"></div>
+    </div>
+
+    <div class="form-panel">
+        <div class="form-container">
+
+            <div class="form-header">
+                <span class="form-eyebrow">Sistema de gestão</span>
+                <h2>Entrar na conta</h2>
+                <p>Acesse com suas credenciais cadastradas</p>
+            </div>
+
+            <div class="form-body">
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>E-mail</mat-label>
+                    <input matInput type="email" [(ngModel)]="email" placeholder="seu@email.com"
+                        (keyup.enter)="entrar()" />
+                    <mat-icon matPrefix>mail_outline</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Senha</mat-label>
+                    <input matInput [type]="senhaVisivel() ? 'text' : 'password'" [(ngModel)]="senha"
+                        (keyup.enter)="entrar()" />
+                    <mat-icon matPrefix>lock_outline</mat-icon>
+                    <button mat-icon-button matSuffix type="button" (click)="toggleSenha()"
+                        [attr.aria-label]="senhaVisivel() ? 'Ocultar senha' : 'Mostrar senha'">
+                        <mat-icon>{{ senhaVisivel() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                @if (erro()) {
+                <div class="erro-msg" role="alert">
+                    <mat-icon>error_outline</mat-icon>
+                    <span>{{ erro() }}</span>
+                </div>
+                }
+
+                <button mat-flat-button class="btn-entrar full-width" (click)="entrar()" [disabled]="carregando()">
+                    @if (carregando()) {
+                    <mat-spinner diameter="20" />
+                    <span>Entrando...</span>
+                    } @else {
+                    <div style="display: flex"><span>Entrar</span>
+                        <mat-icon style="margin-left: 8px;">arrow_forward</mat-icon>
+                    </div>
+                    }
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+</div>

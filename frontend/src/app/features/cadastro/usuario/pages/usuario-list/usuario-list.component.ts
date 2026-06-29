@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
-import { Usuario } from '../../../../../core/models/Usuario';
+import { Usuario } from '../../../../../core/models/usuario.model';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

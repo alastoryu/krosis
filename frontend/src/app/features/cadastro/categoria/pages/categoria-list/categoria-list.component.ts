@@ -175,7 +175,7 @@ export class CategoriaListComponent implements OnInit {
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-import { Page } from '../../../../../core/models/Page';
+import { Page } from '../../../../../core/models/page.model';
 
 @Component({
   selector: 'app-confirm-dialog',

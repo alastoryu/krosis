@@ -1,0 +1,62 @@
+🔍 Opção A (mais usada): câmera para leitura de código de barras
+
+Você usa a câmera do celular via web:
+
+Bibliotecas:
+QuaggaJS (leve e simples)
+ZXing (zxing-js) (mais robusto)
+html5-qrcode (muito popular hoje)
+
+👉 Fluxo:
+
+Abre tela “Entrada de produtos”
+Clica “Escanear”
+Abre câmera
+Lê código de barras
+Sistema busca produto
+Usuário só informa:
+lote
+validade
+quantidade
+📸 Opção B: câmera + input manual híbrido
+
+Se falhar leitura:
+
+campo para digitar código manualmente
+busca automática do produto
+🧠 4. UX ideal para varejo (muito importante)
+
+No celular, o operador não pode perder tempo.
+
+Tela ideal de entrada de lote:
+
+[ ESCANEAR PRODUTO ]
+ou
+[ digitar código ]
+
+→ Produto encontrado:
+Nome: Arroz 5kg
+
+Lote: [__________]
+Validade: [__/__]
+Quantidade: [__]
+
+[ SALVAR ]
+
+👉 Tudo em 1 tela, sem navegação complexa.
+
+Lote
+id
+produto_id
+numero_lote
+validade
+quantidade
+
+Movimentação (IMPORTANTE para escala)
+id
+tipo (ENTRADA / SAIDA / AJUSTE)
+produto_id
+lote_id
+quantidade
+timestamp
+usuario_id

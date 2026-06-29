@@ -1,0 +1,216 @@
+// ── tokens ────────────────────────────────────────────────────────────────
+$brand-900:  #0f1923;
+$brand-800:  #162030;
+$brand-600:  #1e3a5f;
+$accent:     #4fc3f7;
+$accent-dim: #1e88b4;
+$surface:    #ffffff;
+$text-main:  #1a2332;
+$text-muted: #6b7a8d;
+$danger:     #e53935;
+$radius:     16px;
+
+// ── layout ────────────────────────────────────────────────────────────────
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background: $surface;
+}
+
+// ── painel esquerdo ───────────────────────────────────────────────────────
+.brand-panel {
+  position: relative;
+  flex: 0 0 44%;
+  background: linear-gradient(145deg, $brand-900 0%, $brand-600 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 3rem;
+
+  @media (max-width: 768px) { display: none; }
+}
+
+.brand-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+.brand-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba($accent, .15);
+  border: 1.5px solid rgba($accent, .35);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: $accent;
+  }
+}
+
+.brand-name {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin: 0 0 .5rem;
+  color: #fff;
+}
+
+.brand-tagline {
+  font-size: 1.05rem;
+  color: rgba(#fff, .6);
+  line-height: 1.6;
+  margin: 0 0 2.5rem;
+}
+
+.brand-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: .9rem;
+    color: rgba(#fff, .75);
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: $accent;
+    }
+  }
+}
+
+// decorações geométricas
+.geo {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .06;
+  background: $accent;
+}
+.geo-1 { width: 400px; height: 400px; bottom: -120px; right: -100px; }
+.geo-2 { width: 200px; height: 200px; top: 40px;    right: 60px;   opacity: .04; }
+.geo-3 { width: 100px; height: 100px; top: 200px;   left: 30px;    opacity: .08; }
+
+// ── painel direito ────────────────────────────────────────────────────────
+.form-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #f7f9fc;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+// ── cabeçalho do form ─────────────────────────────────────────────────────
+.form-header {
+  margin-bottom: 2.5rem;
+}
+
+.form-eyebrow {
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: $accent-dim;
+  margin-bottom: .75rem;
+}
+
+.form-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $text-main;
+  margin: 0 0 .4rem;
+  letter-spacing: -.5px;
+}
+
+.form-header p {
+  font-size: .9rem;
+  color: $text-muted;
+  margin: 0;
+}
+
+// ── campos ────────────────────────────────────────────────────────────────
+.form-body {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.full-width { width: 100%; }
+
+// ── erro ──────────────────────────────────────────────────────────────────
+.erro-msg {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .75rem 1rem;
+  border-radius: 8px;
+  background: rgba($danger, .08);
+  border: 1px solid rgba($danger, .2);
+  color: $danger;
+  font-size: .875rem;
+  margin-bottom: .25rem;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+// ── botão principal ───────────────────────────────────────────────────────
+.btn-entrar {
+  margin-top: .75rem;
+  height: 52px;
+  border-radius: 10px !important;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  background: linear-gradient(135deg, $brand-600, $accent-dim) !important;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  transition: opacity .2s, transform .15s;
+
+  &:hover:not(:disabled) {
+    opacity: .92;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: .65;
+  }
+
+  mat-spinner { --mdc-circular-progress-active-indicator-color: #fff; }
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}

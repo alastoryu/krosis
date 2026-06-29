@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-
+import { authGuard } from './core/guards/auth.guard';
+import { LoginComponent } from './pages/login/login.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 import { ProdutoListComponent } from './features/cadastro/produto/pages/produto-list/produto-list.component';
@@ -18,9 +19,12 @@ import { DashboardComponent } from './features/dashboard/pages/dashboard/dashboa
 
 export const routes: Routes = [
 
+  { path: 'login', component: LoginComponent, title: 'Login' },
+
   {
     path: '',
     component: MainLayoutComponent,
+    canActivate: [authGuard],
     children: [
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -66,5 +70,5 @@ export const routes: Routes = [
     ]
   },
 
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'login' }
 ];

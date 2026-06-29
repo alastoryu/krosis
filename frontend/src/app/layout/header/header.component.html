@@ -1,80 +1,94 @@
-<header class="header">
-  <mat-toolbar>
-    <div>
-      <span>Krosis</span>
+<mat-toolbar class="header-toolbar">
+
+  <!-- marca -->
+  <a class="brand" routerLink="/dashboard">
+    <div class="brand-icon">
+      <mat-icon>inventory_2</mat-icon>
     </div>
+    <span class="brand-name">Krosis</span>
+  </a>
 
-    <div>
-      <button mat-button routerLink="/dashboard">
-        Dashboard
-      </button>
-      <button mat-button [matMenuTriggerFor]="prevencaoMenu">
-        Prevenção
-      </button>
-      <button mat-button [matMenuTriggerFor]="cadastroMenu">
-        Cadastro
-      </button>
-      <button mat-button [matMenuTriggerFor]="relatorioMenu">
-        Relatório
-      </button>
-      <button mat-button>
-        Configuração
-      </button>
+  <div class="divider-v"></div>
 
-      <mat-menu #cadastroMenu="matMenu">
-        <button mat-menu-item routerLink="/produtos">
-          Produtos
-        </button>
+  <!-- navegação -->
+  <nav class="nav">
+    <button mat-button class="nav-btn" routerLink="/dashboard" routerLinkActive="active">
+      Dashboard
+    </button>
 
-        <button mat-menu-item routerLink="/categorias">
-          Categorias
-        </button>
+    <button mat-button class="nav-btn" [matMenuTriggerFor]="prevencaoMenu" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact:false}">
+      Prevenção
+      <mat-icon class="chevron">expand_more</mat-icon>
+    </button>
 
-        <button mat-menu-item routerLink="/fabricantes">
-          Fabricantes
-        </button>
+    <button mat-button class="nav-btn" [matMenuTriggerFor]="cadastroMenu" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact:false}">
+      Cadastro
+      <mat-icon class="chevron">expand_more</mat-icon>
+    </button>
 
-        <button mat-menu-item routerLink="/usuarios">
-          Usuários
-        </button>
-      </mat-menu>
+    <button mat-button class="nav-btn" [matMenuTriggerFor]="relatorioMenu" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact:false}">
+      Relatório
+      <mat-icon class="chevron">expand_more</mat-icon>
+    </button>
 
-      <mat-menu #prevencaoMenu="matMenu">
-        <button mat-menu-item routerLink="/lotes">
-          Lotes
-        </button>
+    <button mat-button class="nav-btn">Configuração</button>
+  </nav>
 
-        <button mat-menu-item routerLink="/estoques">
-          Estoques
-        </button>
-      </mat-menu>
+  <!-- menus -->
+  <mat-menu #prevencaoMenu="matMenu" class="krosis-menu">
+    <button mat-menu-item routerLink="/lotes">
+      <mat-icon>inventory</mat-icon> Lotes
+    </button>
+    <button mat-menu-item routerLink="/estoques">
+      <mat-icon>warehouse</mat-icon> Estoques
+    </button>
+  </mat-menu>
 
-      <mat-menu #relatorioMenu="matMenu">
-        <button mat-menu-item routerLink="/relatorio-vencimento">
-          Vencimento
-        </button>
+  <mat-menu #cadastroMenu="matMenu" class="krosis-menu">
+    <button mat-menu-item routerLink="/produtos">
+      <mat-icon>category</mat-icon> Produtos
+    </button>
+    <button mat-menu-item routerLink="/categorias">
+      <mat-icon>label</mat-icon> Categorias
+    </button>
+    <button mat-menu-item routerLink="/fabricantes">
+      <mat-icon>factory</mat-icon> Fabricantes
+    </button>
+    <button mat-menu-item routerLink="/usuarios">
+      <mat-icon>group</mat-icon> Usuários
+    </button>
+  </mat-menu>
 
-        <button mat-menu-item routerLink="/relatorio-estoque">
-          Estoque
-        </button>
-      </mat-menu>
-    </div>
+  <mat-menu #relatorioMenu="matMenu" class="krosis-menu">
+    <button mat-menu-item routerLink="/relatorio-vencimento">
+      <mat-icon>event_busy</mat-icon> Vencimento
+    </button>
+    <button mat-menu-item routerLink="/relatorio-estoque">
+      <mat-icon>bar_chart</mat-icon> Estoque
+    </button>
+  </mat-menu>
 
-    <div>
-      <button mat-button [matMenuTriggerFor]="usuarioMenu" class="user">
-        <span>Usuário</span>
-        <mat-icon>person</mat-icon>
-      </button>
+  <!-- spacer -->
+  <span class="spacer"></span>
 
-      <mat-menu #usuarioMenu="matMenu">
-        <button mat-menu-item routerLink="/relatorio-vencimento">
-          Perfil
-        </button>
+  <!-- usuário -->
+  <div class="user-area" [matMenuTriggerFor]="usuarioMenu">
+    <span class="user-badge">{{ role }}</span>
+    <span class="user-name">{{ nomeUsuario }}</span>
+    <div class="avatar">{{ iniciais }}</div>
+  </div>
 
-        <button mat-menu-item routerLink="/relatorio-estoque">
-          Sair
-        </button>
-      </mat-menu>
-    </div>
-  </mat-toolbar>
-</header>
+  <mat-menu #usuarioMenu="matMenu" class="krosis-menu">
+    <button mat-menu-item>
+      <mat-icon>person</mat-icon> Perfil
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item class="sair" (click)="sair()">
+      <mat-icon>logout</mat-icon> Sair
+    </button>
+  </mat-menu>
+
+</mat-toolbar>

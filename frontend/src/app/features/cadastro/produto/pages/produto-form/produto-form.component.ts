@@ -11,9 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
-import { ProdutoService, Produto } from '../../services/produto.service';
-import { Fabricante, FabricanteService } from '../../../fabricante/services/fabricante.service';
-import { Categoria, CategoriaService } from '../../../categoria/services/categoria.service';
+import { ProdutoService } from '../../services/produto.service';
+import { FabricanteService } from '../../../fabricante/services/fabricante.service';
+import { CategoriaService } from '../../../categoria/services/categoria.service';
+import { Categoria } from '../../../categoria/models/categoria.model';
+import { Fabricante } from '../../../fabricante/models/fabricante.model';
+import { Produto } from '../../models/produto.model';
 
 @Component({
   selector: 'app-produto-form',

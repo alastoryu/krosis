@@ -39,11 +39,8 @@
 
   <!-- menus -->
   <mat-menu #prevencaoMenu="matMenu" class="krosis-menu">
-    <button mat-menu-item routerLink="/lotes">
-      <mat-icon>inventory</mat-icon> Lotes
-    </button>
-    <button mat-menu-item routerLink="/estoques">
-      <mat-icon>warehouse</mat-icon> Estoques
+    <button mat-menu-item routerLink="/entrada">
+      <mat-icon>inventory</mat-icon> Entrada Lotes
     </button>
   </mat-menu>
 
@@ -76,9 +73,9 @@
 
   <!-- usuário -->
   <div class="user-area" [matMenuTriggerFor]="usuarioMenu">
-    <span class="user-badge">{{ role }}</span>
-    <span class="user-name">{{ nomeUsuario }}</span>
-    <div class="avatar">{{ iniciais }}</div>
+    <span class="user-badge">{{ role() }}</span>
+    <span class="user-name">{{ nomeUsuario() }}</span>
+    <div class="avatar">{{ iniciais() }}</div>
   </div>
 
   <mat-menu #usuarioMenu="matMenu" class="krosis-menu">

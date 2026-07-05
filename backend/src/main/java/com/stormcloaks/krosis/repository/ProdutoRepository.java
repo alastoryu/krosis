@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import com.stormcloaks.krosis.model.Produto;
 
+import java.util.Optional;
+
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long>, JpaSpecificationExecutor<Produto> {
-
+    Optional<Produto> findByCodigoDeBarras(String codigoBarras);
 }

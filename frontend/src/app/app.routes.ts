@@ -15,7 +15,8 @@ import { FabricanteFormComponent } from './features/cadastro/fabricante/pages/fa
 import { UsuarioListComponent } from './features/cadastro/usuario/pages/usuario-list/usuario-list.component';
 import { UsuarioFormComponent } from './features/cadastro/usuario/pages/usuario-form/usuario-form.component';
 
-import { DashboardComponent } from './features/dashboard/pages/dashboard/dashboard.component';
+import { DashboardComponent } from './features/dashboard/pages/dashboard.component';
+import { EntradaLoteComponent } from './features/prevencao/entrada-lote/entrada-lote.component';
 
 export const routes: Routes = [
 
@@ -65,10 +66,12 @@ export const routes: Routes = [
           { path: 'novo', component: UsuarioFormComponent, title: 'Novo Usuário' },
           { path: 'editar/:id', component: UsuarioFormComponent, title: 'Editar Usuário' }
         ]
-      }
+      },
+
+      { path: 'entrada', component: EntradaLoteComponent, title: 'Entrada de Produto' }
 
     ]
   },
 
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: '' }
 ];

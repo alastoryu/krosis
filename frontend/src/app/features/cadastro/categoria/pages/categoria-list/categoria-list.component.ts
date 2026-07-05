@@ -1,11 +1,10 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CommonModule } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,14 +13,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 
-import { CategoriaService, Categoria, CategoriaFiltro } from '../../services/categoria.service';
+import { CategoriaService } from '../../services/categoria.service';
+import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
+
+import { Categoria } from '../../models/categoria.model';
+import { CategoriaFiltro } from '../../models/categoria-filtro.model';
+import { Router } from '@angular/router';
+import { filter, finalize, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-categoria-lista',
   standalone: true,
   imports: [
-    MatSelectModule,
-    FormsModule,
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
@@ -36,17 +39,15 @@ import { CategoriaService, Categoria, CategoriaFiltro } from '../../services/cat
   templateUrl: './categoria-list.component.html',
   styleUrls: ['./categoria-list.component.scss']
 })
-export class CategoriaListComponent implements OnInit {
+export class CategoriaListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'nome', 'ativo', 'acoes'];
   dataSource = new MatTableDataSource<Categoria>([]);
   loading = false;
-  
-  // Propriedades para paginação
+
   totalElements = 0;
   pageSize = 10;
   pageIndex = 0;
-  
-  // Filtros
+
   filtroNome = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -54,17 +55,16 @@ export class CategoriaListComponent implements OnInit {
 
   constructor(
     private categoriaService: CategoriaService,
-    private router: Router,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) {}
+    private confirmDialog: ConfirmDialogService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.carregarCategorias();
   }
 
   ngAfterViewInit() {
-    // Configurar paginação manual
     if (this.paginator) {
       this.paginator.page.subscribe(() => {
         this.pageIndex = this.paginator.pageIndex;
@@ -73,18 +73,17 @@ export class CategoriaListComponent implements OnInit {
       });
     }
 
-    // Configurar ordenação manual
     if (this.sort) {
       this.sort.sortChange.subscribe(() => {
-        this.pageIndex = 0; // Resetar para primeira página ao ordenar
+        this.pageIndex = 0;
         this.carregarCategorias();
       });
     }
   }
 
-   carregarCategorias() {
+  carregarCategorias() {
     this.loading = true;
-    
+
     const filtro: CategoriaFiltro = {
       page: this.pageIndex,
       size: this.pageSize,
@@ -96,33 +95,35 @@ export class CategoriaListComponent implements OnInit {
       filtro.direction = this.sort.direction as 'asc' | 'desc';
     }
 
-    this.categoriaService.listarCategorias(filtro).subscribe({
-      next: (page: Page<Categoria>) => {
-        this.dataSource.data = page.content;
-        this.totalElements = page.totalElements;
-        
-        if (this.paginator) {
-          this.paginator.length = this.totalElements;
-          this.paginator.pageIndex = page.number;
-          this.paginator.pageSize = page.size;
+    this.categoriaService
+      .listarCategorias(filtro)
+      .pipe(
+        finalize(() => this.loading = false)
+      )
+      .subscribe({
+        next: page => {
+          this.dataSource.data = page.content;
+          this.totalElements = page.totalElements;
+
+          if (this.paginator) {
+            this.paginator.length = page.totalElements;
+            this.paginator.pageIndex = page.number;
+            this.paginator.pageSize = page.size;
+          }
+        },
+        error: error => {
+          console.error(error);
+          this.dataSource.data = [];
+          this.totalElements = 0;
+          this.showMessage('Erro ao carregar categorias');
         }
-        
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar categorias:', error);
-        this.showMessage('Erro ao carregar categorias');
-        this.dataSource.data = [];
-        this.totalElements = 0;
-        this.loading = false;
-      }
-    });
+      });
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filtroNome = filterValue.trim();
-    this.pageIndex = 0; // Resetar para primeira página
+    this.pageIndex = 0;
     this.carregarCategorias();
   }
 
@@ -140,76 +141,32 @@ export class CategoriaListComponent implements OnInit {
     this.router.navigate(['/categorias/editar', categoria.id]);
   }
 
-  excluirCategoria(categoria: Categoria) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '300px',
-      data: {
-        titulo: 'Confirmar Exclusão',
-        mensagem: `Deseja realmente excluir a categoria "${categoria.nome}"?`
-      }
-    });
+  excluirCategoria(categoria: Categoria): void {
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.categoriaService.excluirCategoria(categoria.id).subscribe({
-          next: () => {
-            this.showMessage('Categoria excluída com sucesso!');
-            this.carregarCategorias();
-          },
-          error: (error) => {
-            console.error('Erro ao excluir categoria:', error);
-            this.showMessage('Erro ao excluir categoria');
-          }
-        });
-      }
-    });
+    this.confirmDialog
+      .confirmDelete(categoria.nome)
+      .pipe(
+        filter(Boolean),
+        switchMap(() =>
+          this.categoriaService.excluirCategoria(categoria.id)
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.showMessage('Categoria excluída com sucesso!');
+          this.carregarCategorias();
+        },
+        error: (error) => {
+          console.error(error);
+          this.showMessage('Erro ao excluir categoria');
+        }
+      });
+
   }
 
   private showMessage(message: string) {
     this.snackBar.open(message, 'Fechar', {
       duration: 3000
     });
-  }
-}
-
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
-import { Page } from '../../../../../core/models/page.model';
-
-@Component({
-  selector: 'app-confirm-dialog',
-  standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule],
-  template: `
-    <h2 mat-dialog-title>{{ data.titulo }}</h2>
-    <div mat-dialog-content>
-      <p>{{ data.mensagem }}</p>
-    </div>
-    <div mat-dialog-actions class="dialog-actions">
-      <button mat-button (click)="onCancel()">Cancelar</button>
-      <button mat-raised-button color="warn" (click)="onConfirm()">Confirmar</button>
-    </div>
-  `,
-  styles: [`
-    .dialog-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-  `]
-})
-export class ConfirmDialogComponent {
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
-
-  onConfirm(): void {
-    this.dialogRef.close(true);
-  }
-
-  onCancel(): void {
-    this.dialogRef.close(false);
   }
 }

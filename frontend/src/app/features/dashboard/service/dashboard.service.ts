@@ -1,24 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-export interface DashboardResumo {
-  totalProdutos: number;
-  totalCategorias: number;
-  totalFabricantes: number;
-  totalUsuarios: number;
-}
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { environment } from "../../../environments/environment";
+import { DashboardResumo } from "../models/dashboard-resumo";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class DashboardService {
-
-  private baseUrl = 'http://localhost:8081/dashboard';
+  private readonly API = `${environment.apiUrl}/dashboard`;
 
   constructor(private http: HttpClient) {}
 
   getResumo(): Observable<DashboardResumo> {
-    return this.http.get<DashboardResumo>(this.baseUrl);
+    return this.http.get<DashboardResumo>(this.API);
   }
 }

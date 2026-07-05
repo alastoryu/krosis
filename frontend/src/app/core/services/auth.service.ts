@@ -3,18 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '../models/usuario.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API = 'http://localhost:8081/api/auth';
+  private readonly API = `${environment.apiUrl}/api/auth`;
   private readonly TOKEN_KEY = 'auth_token';
 
   private _usuario = signal<LoginResponse | null>(this.carregarDoStorage());
 
-  readonly usuario   = this._usuario.asReadonly();
-  readonly logado    = computed(() => !!this._usuario());
+  readonly usuario = this._usuario.asReadonly();
+  readonly logado = computed(() => !!this._usuario());
   readonly nomeUsuario = computed(() => this._usuario()?.nome ?? '');
-  readonly role      = computed(() => this._usuario()?.role ?? '');
+  readonly role = computed(() => this._usuario()?.role ?? '');
 
   constructor(private http: HttpClient, private router: Router) {}
 

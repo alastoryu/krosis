@@ -31,10 +31,10 @@ export class LoginComponent {
   email = '';
   senha = '';
   senhaVisivel = signal(false);
-  carregando   = signal(false);
-  erro         = signal('');
+  carregando = signal(false);
+  erro = signal('');
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) { }
 
   toggleSenha() {
     this.senhaVisivel.update(v => !v);

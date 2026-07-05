@@ -1,4 +1,3 @@
-// ── tokens ────────────────────────────────────────────────────────────────
 $brand-900:  #0f1923;
 $brand-800:  #162030;
 $brand-600:  #1e3a5f;
@@ -10,7 +9,6 @@ $text-muted: #6b7a8d;
 $danger:     #e53935;
 $radius:     16px;
 
-// ── layout ────────────────────────────────────────────────────────────────
 .login-page {
   display: flex;
   min-height: 100vh;
@@ -18,7 +16,6 @@ $radius:     16px;
   background: $surface;
 }
 
-// ── painel esquerdo ───────────────────────────────────────────────────────
 .brand-panel {
   position: relative;
   flex: 0 0 44%;
@@ -96,7 +93,6 @@ $radius:     16px;
   }
 }
 
-// decorações geométricas
 .geo {
   position: absolute;
   border-radius: 50%;
@@ -107,7 +103,6 @@ $radius:     16px;
 .geo-2 { width: 200px; height: 200px; top: 40px;    right: 60px;   opacity: .04; }
 .geo-3 { width: 100px; height: 100px; top: 200px;   left: 30px;    opacity: .08; }
 
-// ── painel direito ────────────────────────────────────────────────────────
 .form-panel {
   flex: 1;
   display: flex;
@@ -122,7 +117,6 @@ $radius:     16px;
   max-width: 420px;
 }
 
-// ── cabeçalho do form ─────────────────────────────────────────────────────
 .form-header {
   margin-bottom: 2.5rem;
 }
@@ -151,7 +145,6 @@ $radius:     16px;
   margin: 0;
 }
 
-// ── campos ────────────────────────────────────────────────────────────────
 .form-body {
   display: flex;
   flex-direction: column;
@@ -160,7 +153,6 @@ $radius:     16px;
 
 .full-width { width: 100%; }
 
-// ── erro ──────────────────────────────────────────────────────────────────
 .erro-msg {
   display: flex;
   align-items: center;
@@ -181,7 +173,6 @@ $radius:     16px;
   }
 }
 
-// ── botão principal ───────────────────────────────────────────────────────
 .btn-entrar {
   margin-top: .75rem;
   height: 52px;

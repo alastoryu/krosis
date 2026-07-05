@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>
+  <mat-icon *ngIf="data.icone">
+    {{ data.icone }}
+  </mat-icon>
+
+  {{ data.titulo }}
+</h2>
+
+<mat-dialog-content>
+  {{ data.mensagem }}
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button mat-button (click)="cancelar()">
+    {{ data.textoCancelar ?? 'Cancelar' }}
+  </button>
+
+  <button
+    mat-raised-button
+    [color]="data.corConfirmar ?? 'primary'"
+    (click)="confirmar()">
+
+    {{ data.textoConfirmar ?? 'Confirmar' }}
+
+  </button>
+
+</mat-dialog-actions>

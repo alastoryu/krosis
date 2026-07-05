@@ -2,39 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Page } from '../../../../core/models/page.model';
-
-export interface Categoria {
-  id: number;
-  nome: string;
-  descricao?: string;
-  ativo: boolean;
-  dataCriacao?: string;
-  dataAtualizacao?: string;
-}
-
-export interface CreateCategoriaDTO {
-  nome: string;
-  descricao?: string;
-  ativo: boolean;
-}
-
-export interface CategoriaFiltro {
-  page?: number;
-  size?: number;
-  sort?: string;
-  direction?: 'asc' | 'desc';
-  nome?: string;
-  ativo?: boolean;
-}
+import { environment } from '../../../../environments/environment';
+import { CategoriaFiltro } from '../models/categoria-filtro.model';
+import { Categoria } from '../models/categoria.model';
+import { CreateCategoriaDTO } from '../models/categoria-create.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriaService {
 
-  private readonly baseUrl = 'http://localhost:8081/categorias';
+  private readonly API = `${environment.apiUrl}/categorias`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   listarCategorias(
     filtro?: CategoriaFiltro
@@ -68,14 +48,14 @@ export class CategoriaService {
     }
 
     return this.http.get<Page<Categoria>>(
-      this.baseUrl,
+      this.API,
       { params }
     );
   }
 
   buscarPorId(id: number): Observable<Categoria> {
     return this.http.get<Categoria>(
-      `${this.baseUrl}/${id}`
+      `${this.API}/${id}`
     );
   }
 
@@ -83,7 +63,7 @@ export class CategoriaService {
     categoria: CreateCategoriaDTO
   ): Observable<Categoria> {
     return this.http.post<Categoria>(
-      this.baseUrl,
+      this.API,
       categoria
     );
   }
@@ -93,14 +73,14 @@ export class CategoriaService {
     categoria: CreateCategoriaDTO
   ): Observable<Categoria> {
     return this.http.put<Categoria>(
-      `${this.baseUrl}/${id}`,
+      `${this.API}/${id}`,
       categoria
     );
   }
 
   excluirCategoria(id: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.baseUrl}/${id}`
+      `${this.API}/${id}`
     );
   }
 }

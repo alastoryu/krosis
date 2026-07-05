@@ -11,11 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
-import {
-  CategoriaService,
-  Categoria,
-  CreateCategoriaDTO
-} from '../../services/categoria.service';
+import { CategoriaService } from '../../services/categoria.service';
+import { Categoria } from '../../models/categoria.model';
+import { CreateCategoriaDTO } from '../../models/categoria-create.model';
 
 @Component({
   selector: 'app-categoria-form',
@@ -117,17 +115,16 @@ export class CategoriaFormComponent implements OnInit {
 
     this.loading = true;
 
-    const categoriaData: CreateCategoriaDTO =
-      this.categoriaForm.value;
+    const categoriaData: CreateCategoriaDTO = this.categoriaForm.value;
 
     const request = this.isEditMode
       ? this.categoriaService.editarCategoria(
-          this.categoriaId!,
-          categoriaData
-        )
+        this.categoriaId!,
+        categoriaData
+      )
       : this.categoriaService.criarCategoria(
-          categoriaData
-        );
+        categoriaData
+      );
 
     request.subscribe({
       next: () => {

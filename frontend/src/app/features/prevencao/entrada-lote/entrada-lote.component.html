@@ -1,0 +1,115 @@
+<div class="entrada-page">
+
+  <div class="entrada-card">
+
+    <div class="card-header">
+      <div class="card-icon"><mat-icon>qr_code_scanner</mat-icon></div>
+      <div>
+        <h2>Entrada de Produto</h2>
+        <p>Escaneie ou digite o código de barras</p>
+      </div>
+    </div>
+
+    <!-- ── etapa 1: scan ── -->
+    @if (etapa() === 'scan') {
+
+      <!-- área do scanner -->
+      <div class="scanner-area" [class.ativo]="scanAtivo()">
+        @if (scanAtivo()) {
+          <video #videoEl class="scanner-video" autoplay muted playsinline></video>
+          <div class="scan-overlay">
+            <div class="scan-line"></div>
+          </div>
+          <button class="btn-cancelar-scan" (click)="pararScan()">
+            <mat-icon>close</mat-icon> Cancelar
+          </button>
+        } @else {
+          <div class="scanner-placeholder">
+            <mat-icon>photo_camera</mat-icon>
+            <span>Câmera desativada</span>
+          </div>
+        }
+      </div>
+
+      <button class="btn-primary" (click)="iniciarScan()" [disabled]="scanAtivo() || buscando()">
+        <mat-icon>qr_code_scanner</mat-icon>
+        Escanear código de barras
+      </button>
+
+      <div class="divider"><span>ou</span></div>
+
+      <!-- input manual -->
+      <div class="input-group">
+        <div class="input-wrap">
+          <mat-icon class="input-icon">barcode_reader</mat-icon>
+          <input type="text" [(ngModel)]="codigoManual"
+                 placeholder="Digite o código manualmente"
+                 (keyup.enter)="buscarManual()" />
+        </div>
+        <button class="btn-secondary" (click)="buscarManual()" [disabled]="buscando()">
+          @if (buscando()) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>search</mat-icon>
+          }
+        </button>
+      </div>
+    }
+
+    <!-- ── etapa 2: form de entrada ── -->
+    @if (etapa() === 'form' && produto()) {
+
+      <div class="produto-encontrado">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <span class="label">Produto encontrado</span>
+          <strong>{{ produto()!.nome }}</strong>
+          <span class="codigo">{{ produto()!.codigoBarras }}</span>
+        </div>
+        <button class="btn-trocar" (click)="resetar()">
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
+      </div>
+
+      <div class="form-fields">
+
+        <div class="field">
+          <label>Número do lote</label>
+          <div class="input-wrap">
+            <mat-icon class="input-icon">tag</mat-icon>
+            <input type="text" [(ngModel)]="numeroLote" placeholder="Ex: LOT-2026-001" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Validade</label>
+          <div class="input-wrap">
+            <mat-icon class="input-icon">event</mat-icon>
+            <input type="date" [(ngModel)]="validade" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Quantidade</label>
+          <div class="input-wrap">
+            <mat-icon class="input-icon">inventory_2</mat-icon>
+            <input type="number" [(ngModel)]="quantidade" placeholder="0" min="1" />
+          </div>
+        </div>
+
+      </div>
+
+      <button class="btn-primary btn-salvar" (click)="salvar()" [disabled]="salvando()">
+        @if (salvando()) {
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Salvando...</span>
+        } @else {
+          <mat-icon>save</mat-icon>
+          <span>Registrar entrada</span>
+        }
+      </button>
+
+    }
+
+  </div>
+</div>

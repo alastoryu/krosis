@@ -6,7 +6,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 @Component({
   selector: 'app-root',
@@ -17,8 +16,7 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatSidenavModule,
-    MainLayoutComponent
+    MatSidenavModule
 ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

@@ -1,0 +1,180 @@
+$text:    #1a2332;
+$muted:   #6b7a8d;
+$surface: #f7f9fc;
+$radius:  12px;
+
+.relatorio-page {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.relatorio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  h2 { font-size: 1.2rem; font-weight: 700; color: $text; margin: 0; }
+  p  { font-size: .8rem; color: $muted; margin: 0; }
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(229, 57, 53, .1);
+  border: 1.5px solid rgba(229, 57, 53, .2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mat-icon { color: #e53935; }
+}
+
+.btn-exportar {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  background: none;
+  border: 1.5px solid #d8e0ea;
+  border-radius: 8px;
+  padding: .45rem .9rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: $muted;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+  &:hover { border-color: #1e88b4; color: #1e88b4; }
+}
+
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #e8edf3;
+  border-radius: $radius;
+  padding: .9rem 1.25rem;
+}
+
+.filtro-label { font-size: .82rem; color: $muted; font-weight: 500; }
+
+.chips-dias {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+
+.chip-dia {
+  border: 1.5px solid #d8e0ea;
+  background: #fff;
+  border-radius: 20px;
+  padding: .25rem .85rem;
+  font-size: .8rem;
+  font-weight: 600;
+  color: $muted;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+
+  &.ativo {
+    background: #1e3a5f;
+    border-color: #1e3a5f;
+    color: #fff;
+  }
+  &:hover:not(.ativo) { border-color: #1e88b4; color: #1e88b4; }
+}
+
+.sumario {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sumario-card {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .9rem 1.1rem;
+  border-radius: $radius;
+  border: 1.5px solid;
+
+  > div { display: flex; flex-direction: column; gap: .1rem; }
+  strong { font-size: 1.4rem; font-weight: 700; line-height: 1; }
+  span   { font-size: .75rem; font-weight: 500; }
+  mat-icon { font-size: 24px; }
+
+  &.vermelho { background: rgba(229,57,53,.07); border-color: rgba(229,57,53,.2); color: #c62828; }
+  &.laranja  { background: rgba(245,124,0,.07); border-color: rgba(245,124,0,.2); color: #e65100; }
+  &.amarelo  { background: rgba(251,192,45,.07); border-color: rgba(251,192,45,.2); color: #f57f17; }
+}
+
+.tabela-container {
+  background: #fff;
+  border-radius: $radius;
+  border: 1px solid #e8edf3;
+  overflow: hidden;
+}
+
+.relatorio-table {
+  width: 100%;
+
+  th { font-size: .78rem; font-weight: 700; color: $muted; text-transform: uppercase; letter-spacing: .04em; }
+  td { font-size: .875rem; color: $text; }
+
+  .row-vencido { background: rgba(229,57,53,.04); }
+  .row-critico { background: rgba(245,124,0,.04); }
+}
+
+.produto-cell {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+  strong { font-size: .875rem; }
+  .codigo-barras { font-size: .72rem; color: $muted; font-family: monospace; }
+}
+
+code {
+  font-family: monospace;
+  font-size: .82rem;
+  background: #f0f4f8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: $text;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+
+  &-vencido { background: rgba(229,57,53,.12); color: #c62828; }
+  &-critico { background: rgba(245,124,0,.12); color: #e65100; }
+  &-atencao { background: rgba(251,192,45,.15); color: #f57f17; }
+  &-ok      { background: rgba(46,125,50,.1);  color: #2e7d32; }
+}
+
+.loading, .vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+  color: $muted;
+  mat-icon { font-size: 40px; width: 40px; height: 40px; color: #b0bec5; }
+}

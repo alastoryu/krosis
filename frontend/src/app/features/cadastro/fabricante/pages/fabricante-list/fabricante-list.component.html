@@ -1,213 +1,155 @@
-<!-- fabricante-list.component.html -->
-<div class="container">
-  <mat-card class="list-card">
-    <mat-card-header>
-      <mat-card-title>
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">
+      <div class="page-icon">
         <mat-icon>business</mat-icon>
-        Fabricantes
-      </mat-card-title>
+      </div>
+      <div>
+        <h2>Fabricantes</h2>
+        <p>{{ totalElements }} fabricante(s) cadastrado(s)</p>
+      </div>
+    </div>
+    <button class="btn-novo" (click)="novoFabricante()">
+      <mat-icon>add</mat-icon>
+      Novo Fabricante
+    </button>
+  </div>
 
-      <div class="header-actions">
-        <button mat-raised-button color="primary" (click)="novoFabricante()">
-          <mat-icon>add</mat-icon>
-          Novo Fabricante
+  <div class="filtros-card">
+    <div class="filtros-grid">
+      <div class="field">
+        <label>Nome do fabricante</label>
+        <div class="input-wrap">
+          <mat-icon class="input-icon">search</mat-icon>
+          <input
+            type="text"
+            [(ngModel)]="filtroNome"
+            placeholder="Buscar por nome..."
+            (keyup.enter)="carregarFabricantes()"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="filtros-acoes">
+      <button
+        class="btn-buscar"
+        (click)="carregarFabricantes()"
+        [disabled]="loading"
+      >
+        <mat-icon>search</mat-icon> Buscar
+      </button>
+      <button class="btn-limpar" (click)="limparFiltros()" [disabled]="loading">
+        <mat-icon>restart_alt</mat-icon> Limpar
+      </button>
+    </div>
+  </div>
+
+  <div class="tabela-card">
+    @if (loading) {
+      <div class="estado">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Carregando categorias...</p>
+      </div>
+    }
+
+    @if (!loading && dataSource.data.length === 0) {
+      <div class="estado">
+        <div class="estado-icon"><mat-icon>label</mat-icon></div>
+        <h3>Nenhuma fabricante encontrada</h3>
+        <p>Tente ajustar os filtros ou adicione um novo fabricante</p>
+        <button class="btn-novo" (click)="novoFabricante()">
+          <mat-icon>add</mat-icon> Adicionar Fabricante
         </button>
       </div>
-    </mat-card-header>
+    }
 
-    <mat-card-content>
-
-      <!-- Filtros -->
-      <div class="filters-container">
-
-        <mat-form-field appearance="outline" class="filter-field">
-          <mat-label>Buscar por nome</mat-label>
-          <input matInput
-                 [(ngModel)]="filtroNome"
-                 (keyup.enter)="carregarFabricantes()"
-                 placeholder="Digite o nome do fabricante...">
-
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="filter-field">
-          <mat-label>País de Origem</mat-label>
-          <input matInput
-                 [(ngModel)]="filtroPaisOrigem"
-                 (keyup.enter)="carregarFabricantes()"
-                 placeholder="Ex.: Brasil">
-        </mat-form-field>
-
-        <button mat-raised-button
-                (click)="carregarFabricantes()"
-                [disabled]="loading">
-          <mat-icon>search</mat-icon>
-          Buscar
-        </button>
-
-        <button mat-button
-                (click)="limparFiltros()"
-                [disabled]="loading">
-          <mat-icon>clear</mat-icon>
-          Limpar
-        </button>
-
+    @if (!loading && dataSource.data.length > 0) {
+      <div class="tabela-info">
+        <span
+          >Mostrando <strong>{{ dataSource.data.length }}</strong> de
+          <strong>{{ totalElements }}</strong> categorias</span
+        >
       </div>
 
-      <!-- Informações -->
-      <div class="pagination-info"
-           *ngIf="!loading && totalElements > 0">
-        <span>
-          Mostrando {{ dataSource.data.length }}
-          de {{ totalElements }} fabricantes
-        </span>
-      </div>
+      <table mat-table [dataSource]="dataSource" matSort class="tabela">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+          <td mat-cell *matCellDef="let c">
+            <span class="id-badge">{{ c.id }}</span>
+          </td>
+        </ng-container>
 
-      <!-- Tabela -->
-      <div class="table-container">
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+          <td mat-cell *matCellDef="let c">
+            <div class="produto-cell">
+              <strong>{{ c.nome }}</strong>
+              @if (c.descricao) {
+                <span class="descricao">{{ c.descricao }}</span>
+              }
+            </div>
+          </td>
+        </ng-container>
 
-        <mat-table [dataSource]="dataSource"
-                   matSort
-                   class="fabricantes-table">
+        <ng-container matColumnDef="paisOrigem">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            País de Origem
+          </mat-header-cell>
 
-          <!-- ID -->
-          <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              ID
-            </mat-header-cell>
+          <mat-cell *matCellDef="let fabricante">
+            {{ fabricante.paisOrigem || "-" }}
+          </mat-cell>
+        </ng-container>
 
-            <mat-cell *matCellDef="let fabricante">
-              {{ fabricante.id }}
-            </mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="ativo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let c">
+            <span [class]="c.ativo ? 'chip-ativo' : 'chip-inativo'">
+              <span class="chip-dot"></span>
+              {{ c.ativo ? "Ativo" : "Inativo" }}
+            </span>
+          </td>
+        </ng-container>
 
-          <!-- Nome -->
-          <ng-container matColumnDef="nome">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              Nome
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let fabricante">
-              <div>
-                <strong>{{ fabricante.nome }}</strong>
-
-                <div *ngIf="fabricante.descricao"
-                     class="descricao">
-                  {{ fabricante.descricao }}
-                </div>
-              </div>
-            </mat-cell>
-          </ng-container>
-
-          <!-- País -->
-          <ng-container matColumnDef="paisOrigem">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              País de Origem
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let fabricante">
-              {{ fabricante.paisOrigem || '-' }}
-            </mat-cell>
-          </ng-container>
-
-          <!-- Status -->
-          <ng-container matColumnDef="ativo">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-              Status
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let fabricante">
-              <mat-chip-set>
-                <mat-chip
-                  [class.ativo]="fabricante.ativo"
-                  [class.inativo]="!fabricante.ativo">
-
-                  {{ fabricante.ativo ? 'Ativo' : 'Inativo' }}
-
-                </mat-chip>
-              </mat-chip-set>
-            </mat-cell>
-          </ng-container>
-
-          <!-- Ações -->
-          <ng-container matColumnDef="acoes">
-            <mat-header-cell *matHeaderCellDef>
-              Ações
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let fabricante">
-
-              <button mat-icon-button
-                      color="primary"
-                      (click)="editarFabricante(fabricante)"
-                      matTooltip="Editar fabricante">
-
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let c">
+            <div class="acoes">
+              <button
+                class="btn-acao editar"
+                (click)="editarFabricante(c)"
+                matTooltip="Editar fabricante"
+              >
                 <mat-icon>edit</mat-icon>
-
               </button>
-
-              <button mat-icon-button
-                      color="warn"
-                      (click)="excluirFabricante(fabricante)"
-                      matTooltip="Excluir fabricante">
-
+              <button
+                class="btn-acao excluir"
+                (click)="excluirFabricante(c)"
+                matTooltip="Excluir fabricante"
+              >
                 <mat-icon>delete</mat-icon>
-
               </button>
+            </div>
+          </td>
+        </ng-container>
 
-            </mat-cell>
-          </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="table-row"
+        ></tr>
+      </table>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-        </mat-table>
-
-        <!-- Sem dados -->
-        <div *ngIf="!loading && dataSource.data.length === 0"
-             class="no-data">
-
-          <mat-icon>business</mat-icon>
-
-          <h3>Nenhum fabricante encontrado</h3>
-
-          <p>Comece adicionando um novo fabricante</p>
-
-          <button mat-raised-button
-                  color="primary"
-                  (click)="novoFabricante()">
-
-            <mat-icon>add</mat-icon>
-            Adicionar Fabricante
-
-          </button>
-
-        </div>
-
-        <!-- Loading -->
-        <div *ngIf="loading" class="loading">
-
-          <mat-icon class="loading-icon">
-            hourglass_empty
-          </mat-icon>
-
-          <p>Carregando fabricantes...</p>
-
-        </div>
-
-      </div>
-
-      <!-- Paginação -->
       <mat-paginator
         [length]="totalElements"
         [pageSize]="pageSize"
         [pageIndex]="pageIndex"
-        [pageSizeOptions]="[5,10,20,50]"
+        [pageSizeOptions]="[5, 10, 20, 50]"
         showFirstLastButtons
-        aria-label="Selecione a página dos fabricantes">
-
+      >
       </mat-paginator>
-
-    </mat-card-content>
-  </mat-card>
+    }
+  </div>
 </div>

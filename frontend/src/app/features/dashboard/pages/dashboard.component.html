@@ -1,45 +1,193 @@
 <div class="dashboard">
 
-  <h2>Dashboard</h2>
+  @if (loading) {
+    <div class="loading-full"><mat-spinner diameter="44"></mat-spinner></div>
+  }
 
-  <div *ngIf="loading" class="loading">
-    <mat-spinner diameter="40"></mat-spinner>
-  </div>
+  @if (!loading && resumo) {
 
-  <div class="cards" *ngIf="!loading">
+    <!-- ── linha 1: cards de contagem ── -->
+    <div class="cards-grid">
 
-    <mat-card class="card produtos">
-      <mat-icon>inventory</mat-icon>
-      <div>
-        <h3>{{ totalProdutos }}</h3>
-        <p>Produtos</p>
+      <div class="stat-card azul">
+        <div class="stat-icon"><mat-icon>inventory_2</mat-icon></div>
+        <div class="stat-info">
+          <strong>{{ totalProdutos }}</strong>
+          <span>Produtos</span>
+        </div>
       </div>
-    </mat-card>
 
-    <mat-card class="card categorias">
-      <mat-icon>category</mat-icon>
-      <div>
-        <h3>{{ totalCategorias }}</h3>
-        <p>Categorias</p>
+      <div class="stat-card roxo">
+        <div class="stat-icon"><mat-icon>label</mat-icon></div>
+        <div class="stat-info">
+          <strong>{{ totalCategorias }}</strong>
+          <span>Categorias</span>
+        </div>
       </div>
-    </mat-card>
 
-    <mat-card class="card fabricantes">
-      <mat-icon>factory</mat-icon>
-      <div>
-        <h3>{{ totalFabricantes }}</h3>
-        <p>Fabricantes</p>
+      <div class="stat-card verde">
+        <div class="stat-icon"><mat-icon>factory</mat-icon></div>
+        <div class="stat-info">
+          <strong>{{ totalFabricantes }}</strong>
+          <span>Fabricantes</span>
+        </div>
       </div>
-    </mat-card>
 
-    <mat-card class="card usuarios">
-      <mat-icon>people</mat-icon>
-      <div>
-        <h3>{{ totalUsuarios }}</h3>
-        <p>Usuários</p>
+      <div class="stat-card cinza">
+        <div class="stat-icon"><mat-icon>people</mat-icon></div>
+        <div class="stat-info">
+          <strong>{{ totalUsuarios }}</strong>
+          <span>Usuários</span>
+        </div>
       </div>
-    </mat-card>
 
-  </div>
+    </div>
+
+    <!-- ── linha 2: alertas de vencimento ── -->
+    <div class="alertas-grid">
+
+      <div class="alerta-card vencido" routerLink="/relatorios/vencidos">
+        <mat-icon>dangerous</mat-icon>
+        <div>
+          <strong>{{ resumo.vencidosHoje }}</strong>
+          <span>Vencidos</span>
+        </div>
+        <mat-icon class="seta">chevron_right</mat-icon>
+      </div>
+
+      <div class="alerta-card critico" routerLink="/relatorios/vencimento">
+        <mat-icon>warning</mat-icon>
+        <div>
+          <strong>{{ resumo.vencendoEm7Dias }}</strong>
+          <span>Vencem em 7 dias</span>
+        </div>
+        <mat-icon class="seta">chevron_right</mat-icon>
+      </div>
+
+      <div class="alerta-card atencao" routerLink="/relatorios/vencimento">
+        <mat-icon>schedule</mat-icon>
+        <div>
+          <strong>{{ resumo.vencendoEm30Dias }}</strong>
+          <span>Vencem em 30 dias</span>
+        </div>
+        <mat-icon class="seta">chevron_right</mat-icon>
+      </div>
+
+      <div class="alerta-card info" routerLink="/lotes">
+        <mat-icon>inventory</mat-icon>
+        <div>
+          <strong>{{ resumo.totalLotes }}</strong>
+          <span>Total de lotes</span>
+        </div>
+        <mat-icon class="seta">chevron_right</mat-icon>
+      </div>
+
+    </div>
+
+    <!-- ── linha 3: gráficos ── -->
+    <div class="graficos-grid">
+
+      <div class="grafico-card">
+        <div class="grafico-header">
+          <div class="grafico-titulo">
+            <mat-icon>bar_chart</mat-icon>
+            <span>Lotes vencendo nos próximos 6 meses</span>
+          </div>
+        </div>
+        <div class="grafico-body">
+          <canvas #barCanvas></canvas>
+        </div>
+      </div>
+
+      <div class="grafico-card">
+        <div class="grafico-header">
+          <div class="grafico-titulo">
+            <mat-icon>pie_chart</mat-icon>
+            <span>Estoque por categoria</span>
+          </div>
+        </div>
+        <div class="grafico-body">
+          <canvas #pieCanvas></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── linha 4: tabela de alertas críticos ── -->
+    @if (resumo.alertasCriticos.length > 0) {
+      <div class="tabela-card">
+        <div class="tabela-header">
+          <div class="tabela-titulo">
+            <mat-icon>crisis_alert</mat-icon>
+            <span>Alertas críticos — próximos a vencer</span>
+          </div>
+          <a class="ver-todos" routerLink="/relatorios/vencimento">
+            Ver todos <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+
+        <table mat-table [dataSource]="resumo.alertasCriticos" class="alertas-table">
+
+          <ng-container matColumnDef="nomeProduto">
+            <th mat-header-cell *matHeaderCellDef>Produto</th>
+            <td mat-cell *matCellDef="let row"><strong>{{ row.nomeProduto }}</strong></td>
+          </ng-container>
+
+          <ng-container matColumnDef="numeroLote">
+            <th mat-header-cell *matHeaderCellDef>Lote</th>
+            <td mat-cell *matCellDef="let row"><code>{{ row.numeroLote }}</code></td>
+          </ng-container>
+
+          <ng-container matColumnDef="validade">
+            <th mat-header-cell *matHeaderCellDef>Validade</th>
+            <td mat-cell *matCellDef="let row">{{ row.validade }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="diasRestantes">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span [class]="'badge ' + badgeClass(row.diasRestantes)">
+                {{ badgeLabel(row.diasRestantes) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantidade">
+            <th mat-header-cell *matHeaderCellDef>Qtd</th>
+            <td mat-cell *matCellDef="let row">{{ row.quantidade }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="colunasAlertas"></tr>
+          <tr mat-row *matRowDef="let row; columns: colunasAlertas;"
+              [class.row-vencido]="row.diasRestantes < 0"
+              [class.row-critico]="row.diasRestantes >= 0 && row.diasRestantes <= 7"></tr>
+        </table>
+      </div>
+    }
+
+    <!-- ── atalhos rápidos ── -->
+    <div class="atalhos">
+      <span class="atalhos-titulo">Acesso rápido</span>
+      <div class="atalhos-grid">
+        <button class="atalho" routerLink="/entrada">
+          <mat-icon>qr_code_scanner</mat-icon>
+          <span>Entrada de produto</span>
+        </button>
+        <button class="atalho" routerLink="/relatorios/vencimento">
+          <mat-icon>event_busy</mat-icon>
+          <span>Rel. vencimento</span>
+        </button>
+        <button class="atalho" routerLink="/relatorios/estoque">
+          <mat-icon>inventory</mat-icon>
+          <span>Rel. estoque</span>
+        </button>
+        <button class="atalho" routerLink="/produtos/novo">
+          <mat-icon>add_circle</mat-icon>
+          <span>Novo produto</span>
+        </button>
+      </div>
+    </div>
+
+  }
 
 </div>

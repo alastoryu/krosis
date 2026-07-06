@@ -97,8 +97,8 @@ export class UsuarioFormComponent implements OnInit {
     const data = this.usuarioForm.value;
 
     const request$ = this.isEditMode
-      ? this.service.atualizar(this.id!, data)
-      : this.service.criar(data);
+      ? this.service.editarUsuario(this.id!, data)
+      : this.service.criarUsuario(data);
 
     request$.pipe(finalize(() => (this.loading = false))).subscribe(() => {
       this.router.navigate(["/usuarios"]);

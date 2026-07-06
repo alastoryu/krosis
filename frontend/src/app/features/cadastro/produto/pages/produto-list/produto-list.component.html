@@ -1,172 +1,179 @@
-<div class="container">
-  <mat-card class="list-card">
-    <mat-card-header>
-      <div class="header-content">
+<div class="page">
 
-        <div>
-          <h2>Produtos</h2>
-          <p>{{ totalElements }} produtos cadastrados</p>
-        </div>
-
-        <button mat-raised-button color="primary" (click)="novoProduto()">
-
-          <mat-icon>add</mat-icon>
-          Novo Produto
-        </button>
-
+  <div class="page-header">
+    <div class="page-title">
+      <div class="page-icon">
+        <mat-icon>inventory_2</mat-icon>
       </div>
-    </mat-card-header>
+      <div>
+        <h2>Produtos</h2>
+        <p>{{ totalElements }} produto(s) cadastrado(s)</p>
+      </div>
+    </div>
+    <button class="btn-novo" (click)="novoProduto()">
+      <mat-icon>add</mat-icon>
+      Novo Produto
+    </button>
+  </div>
 
-    <mat-card-content>
-      <div class="filters-container">
-        <mat-form-field appearance="outline" class="filter-field">
-          <mat-label>Buscar por nome</mat-label>
-          <input matInput [(ngModel)]="filtroNome" (keyup.enter)="carregarProdutos()"
-            placeholder="Digite o nome do produto...">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+  <div class="filtros-card">
+    <div class="filtros-grid">
 
-        <mat-form-field appearance="outline" class="filter-field">
-          <mat-label>Categoria</mat-label>
+      <div class="field">
+        <label>Nome do produto</label>
+        <div class="input-wrap">
+          <mat-icon class="input-icon">search</mat-icon>
+          <input type="text" [(ngModel)]="filtroNome"
+                 placeholder="Buscar por nome..."
+                 (keyup.enter)="carregarProdutos()" />
+        </div>
+      </div>
 
-          <input type="text" matInput [matAutocomplete]="autoCategoria" [(ngModel)]="categoriaSelecionada">
-
+      <div class="field">
+        <label>Categoria</label>
+        <div class="input-wrap">
+          <mat-icon class="input-icon">label</mat-icon>
+          <input type="text" [matAutocomplete]="autoCategoria"
+                 [(ngModel)]="categoriaSelecionada"
+                 placeholder="Todas as categorias" />
           <mat-autocomplete #autoCategoria="matAutocomplete" [displayWith]="displayCategoria">
-
-            <mat-option *ngFor="let categoria of categorias" [value]="categoria">
-
-              {{ categoria.nome }}
-            </mat-option>
-
+            @for (c of categorias; track c.id) {
+              <mat-option [value]="c">{{ c.nome }}</mat-option>
+            }
           </mat-autocomplete>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="filter-field">
-          <mat-label>Fabricante</mat-label>
-
-          <input type="text" matInput [matAutocomplete]="autoFabricante" [(ngModel)]="fabricanteSelecionado">
-
-          <mat-autocomplete #autoFabricante="matAutocomplete" [displayWith]="displayFabricante">
-
-            <mat-option *ngFor="let fabricante of fabricantes" [value]="fabricante">
-
-              {{ fabricante.nome }}
-            </mat-option>
-
-          </mat-autocomplete>
-        </mat-form-field>
-
-        <div class="filters-actions">
-          <button mat-raised-button color="primary" (click)="carregarProdutos()">
-
-            <mat-icon>search</mat-icon>
-            Buscar
-          </button>
-
-          <button mat-stroked-button (click)="limparFiltros()">
-
-            <mat-icon>restart_alt</mat-icon>
-            Limpar
-          </button>
         </div>
       </div>
 
-      <div class="pagination-info" *ngIf="!loading && totalElements > 0">
-        <span>Mostrando {{ dataSource.data.length }} de {{ totalElements }} produtos</span>
+      <div class="field">
+        <label>Fabricante</label>
+        <div class="input-wrap">
+          <mat-icon class="input-icon">factory</mat-icon>
+          <input type="text" [matAutocomplete]="autoFabricante"
+                 [(ngModel)]="fabricanteSelecionado"
+                 placeholder="Todos os fabricantes" />
+          <mat-autocomplete #autoFabricante="matAutocomplete" [displayWith]="displayFabricante">
+            @for (f of fabricantes; track f.id) {
+              <mat-option [value]="f">{{ f.nome }}</mat-option>
+            }
+          </mat-autocomplete>
+        </div>
       </div>
 
-      <div class="table-container">
-        <mat-table [dataSource]="dataSource" matSort class="produtos-table mat-elevation-z2">
+    </div>
 
-          <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
-            <mat-cell *matCellDef="let produto">{{ produto.id }}</mat-cell>
-          </ng-container>
+    <div class="filtros-acoes">
+      <button class="btn-buscar" (click)="carregarProdutos()">
+        <mat-icon>search</mat-icon> Buscar
+      </button>
+      <button class="btn-limpar" (click)="limparFiltros()">
+        <mat-icon>restart_alt</mat-icon> Limpar
+      </button>
+    </div>
+  </div>
 
-          <ng-container matColumnDef="nome">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
-            <mat-cell *matCellDef="let produto">
-              <div>
-                <strong>{{ produto.nome }}</strong>
-                <div *ngIf="produto.descricao">
-                  {{ produto.descricao }}
-                </div>
-              </div>
-            </mat-cell>
-          </ng-container>
+  <div class="tabela-card">
 
-          <ng-container matColumnDef="categoria">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</mat-header-cell>
-            <mat-cell *matCellDef="let produto">
-              <mat-chip-set>
-                <mat-chip>{{ produto.categoria?.nome }}</mat-chip>
-              </mat-chip-set>
-            </mat-cell>
-          </ng-container>
+    @if (loading) {
+      <div class="estado">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Carregando produtos...</p>
+      </div>
+    }
 
-          <ng-container matColumnDef="codigoDeBarras">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-            <mat-cell *matCellDef="let produto">
-              {{ produto.codigoDeBarras }}
-            </mat-cell>
-          </ng-container>
+    @if (!loading && dataSource.data.length === 0) {
+      <div class="estado">
+        <div class="estado-icon"><mat-icon>inventory_2</mat-icon></div>
+        <h3>Nenhum produto encontrado</h3>
+        <p>Tente ajustar os filtros ou adicione um novo produto</p>
+        <button class="btn-novo" (click)="novoProduto()">
+          <mat-icon>add</mat-icon> Adicionar Produto
+        </button>
+      </div>
+    }
 
-          <ng-container matColumnDef="fabricante">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Fabricante</mat-header-cell>
-            <mat-cell *matCellDef="let produto">
-              {{ produto.fabricante?.nome || '-' }}
-            </mat-cell>
-          </ng-container>
+    @if (!loading && dataSource.data.length > 0) {
+      <div class="tabela-info">
+        <span>Mostrando <strong>{{ dataSource.data.length }}</strong> de <strong>{{ totalElements }}</strong> produtos</span>
+      </div>
 
-          <ng-container matColumnDef="ativo">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-            <mat-cell *matCellDef="let produto">
-              <mat-chip-set>
-                <mat-chip [color]="produto.ativo ? 'primary' : 'warn'" selected>
-                  {{ produto.ativo ? 'Ativo' : 'Inativo' }}
-                </mat-chip>
-              </mat-chip-set>
-            </mat-cell>
-          </ng-container>
+      <table mat-table [dataSource]="dataSource" matSort class="produtos-table">
 
-          <ng-container matColumnDef="acoes">
-            <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
-            <mat-cell *matCellDef="let produto">
-              <button mat-icon-button color="primary" (click)="editarProduto(produto)">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="id-badge">{{ p.id }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Produto</th>
+          <td mat-cell *matCellDef="let p">
+            <div class="produto-cell">
+              <strong>{{ p.nome }}</strong>
+              @if (p.descricao) {
+                <span class="descricao">{{ p.descricao }}</span>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoria">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="chip-categoria">{{ p.categoria?.nome }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="codigoDeBarras">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cód. Barras</th>
+          <td mat-cell *matCellDef="let p">
+            <code>{{ p.codigoDeBarras || '—' }}</code>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fabricante">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fabricante</th>
+          <td mat-cell *matCellDef="let p">{{ p.fabricante?.nome || '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ativo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let p">
+            <span [class]="p.ativo ? 'chip-ativo' : 'chip-inativo'">
+              <span class="chip-dot"></span>
+              {{ p.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let p">
+            <div class="acoes">
+              <button class="btn-acao editar" (click)="editarProduto(p)"
+                      matTooltip="Editar produto">
                 <mat-icon>edit</mat-icon>
               </button>
-
-              <button mat-icon-button color="warn" (click)="excluirProduto(produto)">
+              <button class="btn-acao excluir" (click)="excluirProduto(p)"
+                      matTooltip="Excluir produto">
                 <mat-icon>delete</mat-icon>
               </button>
-            </mat-cell>
-          </ng-container>
+            </div>
+          </td>
+        </ng-container>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+      </table>
 
-        </mat-table>
-
-        <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
-          <mat-icon>inventory_2</mat-icon>
-          <h3>Nenhum produto encontrado</h3>
-          <p>Comece adicionando um novo produto</p>
-          <button mat-raised-button color="primary" (click)="novoProduto()">
-            <mat-icon>add</mat-icon>
-            Adicionar Produto
-          </button>
-        </div>
-
-        <div *ngIf="loading" class="loading">
-          <mat-icon class="loading-icon">hourglass_empty</mat-icon>
-          <p>Carregando produtos...</p>
-        </div>
-      </div>
-
-      <mat-paginator [length]="totalElements" [pageSize]="pageSize" [pageIndex]="pageIndex"
-        [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons>
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        showFirstLastButtons>
       </mat-paginator>
+    }
 
-    </mat-card-content>
-  </mat-card>
+  </div>
 </div>

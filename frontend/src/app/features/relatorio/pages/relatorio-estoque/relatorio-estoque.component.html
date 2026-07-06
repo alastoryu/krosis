@@ -1,0 +1,128 @@
+<div class="relatorio-page">
+  <div class="relatorio-header">
+    <div class="header-info">
+      <div class="header-icon verde"><mat-icon>inventory</mat-icon></div>
+      <div>
+        <h2>Estoque Atual por Produto</h2>
+        <p>Visão consolidada do estoque com lotes e validades</p>
+      </div>
+    </div>
+    <button class="btn-atualizar" (click)="carregar()">
+      <mat-icon>refresh</mat-icon> Atualizar
+    </button>
+  </div>
+
+  <div class="filtros-card">
+    <div class="filtros-grid">
+      <div class="field">
+        <label>Status</label>
+        <select [(ngModel)]="ativo" (change)="carregar()">
+          <option [ngValue]="undefined">Todos</option>
+          <option [ngValue]="true">Ativos</option>
+          <option [ngValue]="false">Inativos</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Categoria</label>
+        <select [(ngModel)]="categoriaId" (change)="carregar()">
+          <option [ngValue]="undefined">Todas</option>
+          @for (c of categorias; track c.id) {
+            <option [ngValue]="c.id">{{ c.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label>Fabricante</label>
+        <select [(ngModel)]="fabricanteId" (change)="carregar()">
+          <option [ngValue]="undefined">Todos</option>
+          @for (f of fabricantes; track f.id) {
+            <option [ngValue]="f.id">{{ f.nome }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <button class="btn-limpar" (click)="limpar()">
+      <mat-icon>clear</mat-icon> Limpar
+    </button>
+  </div>
+
+  @if (!carregando() && dados().length > 0) {
+    <div class="sumario">
+      <div class="sumario-card azul">
+        <mat-icon>category</mat-icon>
+        <div><strong>{{ totalProdutos }}</strong><span>Produtos</span></div>
+      </div>
+      <div class="sumario-card verde">
+        <mat-icon>inventory_2</mat-icon>
+        <div><strong>{{ totalUnidades }}</strong><span>Unidades em estoque</span></div>
+      </div>
+      <div class="sumario-card vermelho">
+        <mat-icon>remove_shopping_cart</mat-icon>
+        <div><strong>{{ produtosVazios }}</strong><span>Sem estoque</span></div>
+      </div>
+    </div>
+  }
+
+  <div class="tabela-container">
+    @if (carregando()) {
+      <div class="loading"><mat-spinner diameter="40"></mat-spinner></div>
+    } @else if (dados().length === 0) {
+      <div class="vazio">
+        <mat-icon>inventory</mat-icon>
+        <p>Nenhum produto encontrado.</p>
+      </div>
+    } @else {
+      <table mat-table [dataSource]="dados()" class="relatorio-table">
+
+        <ng-container matColumnDef="nomeProduto">
+          <th mat-header-cell *matHeaderCellDef>Produto</th>
+          <td mat-cell *matCellDef="let row"><strong>{{ row.nomeProduto }}</strong></td>
+        </ng-container>
+
+        <ng-container matColumnDef="codigoBarras">
+          <th mat-header-cell *matHeaderCellDef>Cód. Barras</th>
+          <td mat-cell *matCellDef="let row"><code>{{ row.codigoBarras }}</code></td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoria">
+          <th mat-header-cell *matHeaderCellDef>Categoria</th>
+          <td mat-cell *matCellDef="let row">{{ row.categoria }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fabricante">
+          <th mat-header-cell *matHeaderCellDef>Fabricante</th>
+          <td mat-cell *matCellDef="let row">{{ row.fabricante }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantidadeTotal">
+          <th mat-header-cell *matHeaderCellDef>Qtd total</th>
+          <td mat-cell *matCellDef="let row"><strong>{{ row.quantidadeTotal }}</strong></td>
+        </ng-container>
+
+        <ng-container matColumnDef="lotesAtivos">
+          <th mat-header-cell *matHeaderCellDef>Lotes</th>
+          <td mat-cell *matCellDef="let row">{{ row.lotesAtivos }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="validadeMaisProxima">
+          <th mat-header-cell *matHeaderCellDef>Vence em</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.validadeMaisProxima ? (row.validadeMaisProxima | date:'dd/MM/yyyy') : '—' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let row">
+            <span [class]="'badge ' + statusEstoque(row.quantidadeTotal)">
+              {{ statusLabel(row.quantidadeTotal) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+        <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+      </table>
+    }
+  </div>
+</div>

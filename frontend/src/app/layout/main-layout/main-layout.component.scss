@@ -5,7 +5,9 @@
 }
 
 .content {
+  margin-top: 60px;
+  margin-bottom: 48px;
   flex: 1;
-  margin-top: 25px; /* altura do header */
-  padding-bottom: 25px;
+  overflow-y: auto;
+  background: #f7f9fc;
 }

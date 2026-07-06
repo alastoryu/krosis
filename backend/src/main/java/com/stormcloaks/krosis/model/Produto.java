@@ -78,7 +78,7 @@ public class Produto {
 		this.fabricante = fabricante;
 	}
 
-	public boolean getAtivo() {
+	public boolean isAtivo() {
 		return ativo;
 	}
 

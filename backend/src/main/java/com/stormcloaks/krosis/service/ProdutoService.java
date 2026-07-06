@@ -98,7 +98,7 @@ public class ProdutoService {
         dto.setNome(produto.getNome());
         dto.setDescricao(produto.getDescricao());
         dto.setCodigoDeBarras(produto.getCodigoDeBarras());
-        dto.setAtivo(produto.getAtivo());
+        dto.setAtivo(produto.isAtivo());
         if (produto.getCategoria() != null) {
             dto.setCategoriaId(produto.getCategoria().getId());
             dto.setCategoriaNome(produto.getCategoria().getNome());

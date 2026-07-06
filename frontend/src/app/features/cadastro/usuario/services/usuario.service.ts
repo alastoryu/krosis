@@ -13,7 +13,7 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
-  listar(): Observable<PageResponse<Usuario>> {
+  listarUsuarios(): Observable<PageResponse<Usuario>> {
     return this.http.get<PageResponse<Usuario>>(this.API);
   }
 
@@ -21,15 +21,15 @@ export class UsuarioService {
     return this.http.get<Usuario>(`${this.API}/${id}`);
   }
 
-  criar(usuario: Usuario): Observable<Usuario> {
+  criarUsuario(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(this.API, usuario);
   }
 
-  atualizar(id: number, usuario: Usuario): Observable<Usuario> {
+  editarUsuario(id: number, usuario: Usuario): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.API}/${id}`, usuario);
   }
 
-  deletar(id: number): Observable<void> {
+  excluirUsuario(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API}/${id}`);
   }
 }

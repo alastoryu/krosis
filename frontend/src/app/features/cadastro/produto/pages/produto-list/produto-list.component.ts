@@ -28,6 +28,8 @@ import { Categoria } from "../../../categoria/models/categoria.model";
 import { Fabricante } from "../../../fabricante/models/fabricante.model";
 import { ProdutoFiltro } from "../../models/produto-filtro.model";
 import { ConfirmDialogService } from "../../../../../core/services/confirm-dialog.service";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
   selector: "app-produto-lista",
@@ -45,6 +47,8 @@ import { ConfirmDialogService } from "../../../../../core/services/confirm-dialo
     MatFormFieldModule,
     MatChipsModule,
     MatAutocompleteModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: "./produto-list.component.html",
   styleUrls: ["./produto-list.component.scss"],
@@ -72,6 +76,9 @@ export class ProdutoListComponent implements OnInit {
   fabricantes: Fabricante[] = [];
   categoriaSelecionada?: Categoria;
   fabricanteSelecionado?: Fabricante;
+
+  displayCategoria = (c: Categoria) => c?.nome ?? "";
+  displayFabricante = (f: Fabricante) => f?.nome ?? "";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

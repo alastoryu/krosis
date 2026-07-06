@@ -12,6 +12,10 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
+    public DashboardController(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
+    }
+
     @GetMapping
     public DashboardResumoDTO getResumo() {
         return dashboardService.getResumo();

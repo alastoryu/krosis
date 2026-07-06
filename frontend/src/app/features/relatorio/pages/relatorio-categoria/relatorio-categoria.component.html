@@ -1,0 +1,91 @@
+<div class="relatorio-page">
+  <div class="relatorio-header">
+    <div class="header-info">
+      <div class="header-icon roxo"><mat-icon>label</mat-icon></div>
+      <div>
+        <h2>Produtos por Categoria / Fabricante</h2>
+        <p>Visão agrupada por classificação de produtos</p>
+      </div>
+    </div>
+    <button class="btn-atualizar" (click)="carregar()">
+      <mat-icon>refresh</mat-icon> Atualizar
+    </button>
+  </div>
+
+  <div class="filtros-card">
+    <div class="filtros-grid">
+      <div class="field">
+        <label>Categoria</label>
+        <select [(ngModel)]="categoriaId" (change)="carregar()">
+          <option [ngValue]="undefined">Todas</option>
+          @for (c of categorias; track c.id) {
+            <option [ngValue]="c.id">{{ c.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label>Fabricante</label>
+        <select [(ngModel)]="fabricanteId" (change)="carregar()">
+          <option [ngValue]="undefined">Todos</option>
+          @for (f of fabricantes; track f.id) {
+            <option [ngValue]="f.id">{{ f.nome }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <button class="btn-limpar" (click)="limpar()">
+      <mat-icon>clear</mat-icon> Limpar
+    </button>
+  </div>
+
+  <div class="tabela-container">
+    @if (carregando()) {
+      <div class="loading"><mat-spinner diameter="40"></mat-spinner></div>
+    } @else if (dados().length === 0) {
+      <div class="vazio">
+        <mat-icon>category</mat-icon>
+        <p>Nenhum produto encontrado.</p>
+      </div>
+    } @else {
+      <table mat-table [dataSource]="dados()" class="relatorio-table">
+
+        <ng-container matColumnDef="nomeProduto">
+          <th mat-header-cell *matHeaderCellDef>Produto</th>
+          <td mat-cell *matCellDef="let row"><strong>{{ row.nomeProduto }}</strong></td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoria">
+          <th mat-header-cell *matHeaderCellDef>Categoria</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="badge badge-azul">{{ row.categoria }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fabricante">
+          <th mat-header-cell *matHeaderCellDef>Fabricante</th>
+          <td mat-cell *matCellDef="let row">{{ row.fabricante }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantidadeEstoque">
+          <th mat-header-cell *matHeaderCellDef>Em estoque</th>
+          <td mat-cell *matCellDef="let row"><strong>{{ row.quantidadeEstoque }}</strong></td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalLotes">
+          <th mat-header-cell *matHeaderCellDef>Lotes</th>
+          <td mat-cell *matCellDef="let row">{{ row.totalLotes }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="validadeMaisProxima">
+          <th mat-header-cell *matHeaderCellDef>Próximo vencimento</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.validadeMaisProxima ? (row.validadeMaisProxima | date:'dd/MM/yyyy') : '—' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+        <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+      </table>
+    }
+  </div>
+</div>

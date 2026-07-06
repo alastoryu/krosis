@@ -1,31 +1,35 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource, MatTableModule } from "@angular/material/table";
+import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatSort, MatSortModule } from "@angular/material/sort";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatChipsModule } from "@angular/material/chips";
 
-import { CategoriaService } from '../../services/categoria.service';
-import { ConfirmDialogService } from '../../../../../core/services/confirm-dialog.service';
+import { CategoriaService } from "../../services/categoria.service";
+import { ConfirmDialogService } from "../../../../../core/services/confirm-dialog.service";
 
-import { Categoria } from '../../models/categoria.model';
-import { CategoriaFiltro } from '../../models/categoria-filtro.model';
-import { Router } from '@angular/router';
-import { filter, finalize, switchMap } from 'rxjs';
+import { Categoria } from "../../models/categoria.model";
+import { CategoriaFiltro } from "../../models/categoria-filtro.model";
+import { Router } from "@angular/router";
+import { filter, finalize, switchMap } from "rxjs";
+import { FormsModule } from "@angular/forms";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
-  selector: 'app-categoria-lista',
+  selector: "app-categoria-lista",
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -35,12 +39,14 @@ import { filter, finalize, switchMap } from 'rxjs';
     MatInputModule,
     MatFormFieldModule,
     MatChipsModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
   ],
-  templateUrl: './categoria-list.component.html',
-  styleUrls: ['./categoria-list.component.scss']
+  templateUrl: "./categoria-list.component.html",
+  styleUrls: ["./categoria-list.component.scss"],
 })
 export class CategoriaListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'nome', 'ativo', 'acoes'];
+  displayedColumns: string[] = ["id", "nome", "ativo", "acoes"];
   dataSource = new MatTableDataSource<Categoria>([]);
   loading = false;
 
@@ -48,7 +54,7 @@ export class CategoriaListComponent implements OnInit, AfterViewInit {
   pageSize = 10;
   pageIndex = 0;
 
-  filtroNome = '';
+  filtroNome = "";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -57,10 +63,10 @@ export class CategoriaListComponent implements OnInit, AfterViewInit {
     private categoriaService: CategoriaService,
     private confirmDialog: ConfirmDialogService,
     private snackBar: MatSnackBar,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.carregarCategorias();
   }
 
@@ -92,16 +98,14 @@ export class CategoriaListComponent implements OnInit, AfterViewInit {
 
     if (this.sort?.active) {
       filtro.sort = this.sort.active;
-      filtro.direction = this.sort.direction as 'asc' | 'desc';
+      filtro.direction = this.sort.direction as "asc" | "desc";
     }
 
     this.categoriaService
       .listarCategorias(filtro)
-      .pipe(
-        finalize(() => this.loading = false)
-      )
+      .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: page => {
+        next: (page) => {
           this.dataSource.data = page.content;
           this.totalElements = page.totalElements;
 
@@ -111,12 +115,12 @@ export class CategoriaListComponent implements OnInit, AfterViewInit {
             this.paginator.pageSize = page.size;
           }
         },
-        error: error => {
+        error: (error) => {
           console.error(error);
           this.dataSource.data = [];
           this.totalElements = 0;
-          this.showMessage('Erro ao carregar categorias');
-        }
+          this.showMessage("Erro ao carregar categorias");
+        },
       });
   }
 
@@ -128,45 +132,41 @@ export class CategoriaListComponent implements OnInit, AfterViewInit {
   }
 
   limparFiltros() {
-    this.filtroNome = '';
+    this.filtroNome = "";
     this.pageIndex = 0;
     this.carregarCategorias();
   }
 
   novoCategoria() {
-    this.router.navigate(['/categorias/novo']);
+    this.router.navigate(["/categorias/novo"]);
   }
 
   editarCategoria(categoria: Categoria) {
-    this.router.navigate(['/categorias/editar', categoria.id]);
+    this.router.navigate(["/categorias/editar", categoria.id]);
   }
 
   excluirCategoria(categoria: Categoria): void {
-
     this.confirmDialog
       .confirmDelete(categoria.nome)
       .pipe(
         filter(Boolean),
-        switchMap(() =>
-          this.categoriaService.excluirCategoria(categoria.id)
-        )
+        switchMap(() => this.categoriaService.excluirCategoria(categoria.id)),
       )
       .subscribe({
         next: () => {
-          this.showMessage('Categoria excluída com sucesso!');
+          this.showMessage("Categoria excluída com sucesso!");
           this.carregarCategorias();
         },
         error: (error) => {
           console.error(error);
-          this.showMessage('Erro ao excluir categoria');
-        }
+          this.showMessage("Erro ao excluir categoria");
+        },
       });
-
   }
 
   private showMessage(message: string) {
-    this.snackBar.open(message, 'Fechar', {
-      duration: 3000
+    this.snackBar.open(message, "Fechar", {
+      duration: 3000,
     });
   }
 }

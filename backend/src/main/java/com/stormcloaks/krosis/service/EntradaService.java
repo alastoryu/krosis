@@ -31,18 +31,16 @@ public class EntradaService {
         this.usuarioAutenticado     = usuarioAutenticado;
     }
 
-    // busca produto pelo código de barras — chamado após o scan
     public Produto buscarPorCodigoBarras(String codigoBarras) {
         return produtoRepository.findByCodigoDeBarras(codigoBarras)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Produto não encontrado para o código: " + codigoBarras));
     }
-    
+
     @Transactional
     public LoteDTO registrarEntrada(EntradaLoteRequest req) {
         Produto produto = buscarPorCodigoBarras(req.getCodigoBarras());
 
-        // cria o lote
         Lote lote = new Lote();
         lote.setProduto(produto);
         lote.setNumeroLote(req.getNumeroLote());
@@ -50,7 +48,6 @@ public class EntradaService {
         lote.setQuantidade(req.getQuantidade());
         lote = loteRepository.save(lote);
 
-        // registra a movimentação
         Movimentacao mov = new Movimentacao();
         mov.setTipo(Movimentacao.Tipo.ENTRADA);
         mov.setProduto(produto);

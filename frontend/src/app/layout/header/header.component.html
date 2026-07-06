@@ -1,6 +1,5 @@
 <mat-toolbar class="header-toolbar">
 
-  <!-- marca -->
   <a class="brand" routerLink="/dashboard">
     <div class="brand-icon">
       <mat-icon>inventory_2</mat-icon>
@@ -10,26 +9,23 @@
 
   <div class="divider-v"></div>
 
-  <!-- navegação -->
   <nav class="nav">
-    <button mat-button class="nav-btn" routerLink="/dashboard" routerLinkActive="active">
+    <button mat-button class="nav-btn" routerLink="/dashboard" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact:true}">
       Dashboard
     </button>
 
-    <button mat-button class="nav-btn" [matMenuTriggerFor]="prevencaoMenu" routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact:false}">
+    <button mat-button class="nav-btn" [matMenuTriggerFor]="prevencaoMenu">
       Prevenção
       <mat-icon class="chevron">expand_more</mat-icon>
     </button>
 
-    <button mat-button class="nav-btn" [matMenuTriggerFor]="cadastroMenu" routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact:false}">
+    <button mat-button class="nav-btn" [matMenuTriggerFor]="cadastroMenu">
       Cadastro
       <mat-icon class="chevron">expand_more</mat-icon>
     </button>
 
-    <button mat-button class="nav-btn" [matMenuTriggerFor]="relatorioMenu" routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact:false}">
+    <button mat-button class="nav-btn" [matMenuTriggerFor]="relatorioMenu">
       Relatório
       <mat-icon class="chevron">expand_more</mat-icon>
     </button>
@@ -37,10 +33,9 @@
     <button mat-button class="nav-btn">Configuração</button>
   </nav>
 
-  <!-- menus -->
   <mat-menu #prevencaoMenu="matMenu" class="krosis-menu">
     <button mat-menu-item routerLink="/entrada">
-      <mat-icon>inventory</mat-icon> Entrada Lotes
+      <mat-icon>qr_code_scanner</mat-icon> Entrada de Lotes
     </button>
   </mat-menu>
 
@@ -60,18 +55,31 @@
   </mat-menu>
 
   <mat-menu #relatorioMenu="matMenu" class="krosis-menu">
-    <button mat-menu-item routerLink="/relatorio-vencimento">
+    <button mat-menu-item routerLink="/relatorios/vencimento">
       <mat-icon>event_busy</mat-icon> Vencimento
     </button>
-    <button mat-menu-item routerLink="/relatorio-estoque">
-      <mat-icon>bar_chart</mat-icon> Estoque
+    <button mat-menu-item routerLink="/relatorios/vencidos">
+      <mat-icon>dangerous</mat-icon> Vencidos
+    </button>
+    <button mat-menu-item routerLink="/relatorios/movimentacoes">
+      <mat-icon>swap_vert</mat-icon> Movimentações
+    </button>
+    <button mat-menu-item routerLink="/relatorios/estoque">
+      <mat-icon>inventory</mat-icon> Estoque
+    </button>
+    <button mat-menu-item routerLink="/relatorios/por-categoria">
+      <mat-icon>label</mat-icon> Por Categoria
+    </button>
+    <button mat-menu-item routerLink="/relatorios/historico-operador">
+      <mat-icon>manage_accounts</mat-icon> Histórico Operador
+    </button>
+    <button mat-menu-item routerLink="/relatorios/sem-movimentacao">
+      <mat-icon>warning_amber</mat-icon> Sem Movimentação
     </button>
   </mat-menu>
 
-  <!-- spacer -->
   <span class="spacer"></span>
 
-  <!-- usuário -->
   <div class="user-area" [matMenuTriggerFor]="usuarioMenu">
     <span class="user-badge">{{ role() }}</span>
     <span class="user-name">{{ nomeUsuario() }}</span>

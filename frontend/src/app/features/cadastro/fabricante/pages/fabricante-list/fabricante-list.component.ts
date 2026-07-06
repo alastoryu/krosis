@@ -24,6 +24,8 @@ import { Fabricante } from "../../models/fabricante.model";
 import { FabricanteFiltro } from "../../models/fabricante-filtro.model";
 import { ConfirmDialogService } from "../../../../../core/services/confirm-dialog.service";
 import { filter, finalize, switchMap } from "rxjs";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: "app-fabricante-lista",
@@ -40,13 +42,14 @@ import { filter, finalize, switchMap } from "rxjs";
     MatInputModule,
     MatFormFieldModule,
     MatChipsModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
   ],
   templateUrl: "./fabricante-list.component.html",
   styleUrls: ["./fabricante-list.component.scss"],
 })
 export class FabricanteListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ["id", "nome", "paisOrigem", "ativo", "acoes"];
-
   dataSource = new MatTableDataSource<Fabricante>([]);
   loading = false;
 

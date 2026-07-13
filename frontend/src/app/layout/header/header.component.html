@@ -7,31 +7,38 @@
     <span class="brand-name">Krosis</span>
   </a>
 
-  <div class="divider-v"></div>
-
-  <nav class="nav">
+  <nav class="nav desktop-only">
     <button mat-button class="nav-btn" routerLink="/dashboard" routerLinkActive="active"
             [routerLinkActiveOptions]="{exact:true}">
       Dashboard
     </button>
 
     <button mat-button class="nav-btn" [matMenuTriggerFor]="prevencaoMenu">
-      Prevenção
-      <mat-icon class="chevron">expand_more</mat-icon>
+      Prevenção <mat-icon class="chevron">expand_more</mat-icon>
     </button>
 
     <button mat-button class="nav-btn" [matMenuTriggerFor]="cadastroMenu">
-      Cadastro
-      <mat-icon class="chevron">expand_more</mat-icon>
+      Cadastro <mat-icon class="chevron">expand_more</mat-icon>
     </button>
 
     <button mat-button class="nav-btn" [matMenuTriggerFor]="relatorioMenu">
-      Relatório
-      <mat-icon class="chevron">expand_more</mat-icon>
+      Relatório <mat-icon class="chevron">expand_more</mat-icon>
     </button>
 
     <button mat-button class="nav-btn">Configuração</button>
   </nav>
+
+  <span class="spacer"></span>
+  
+  <div class="user-area desktop-only" [matMenuTriggerFor]="usuarioMenu">
+    <span class="user-badge">{{ role() }}</span>
+    <span class="user-name">{{ nomeUsuario() }}</span>
+    <div class="avatar">{{ iniciais() }}</div>
+  </div>
+
+  <button class="btn-menu mobile-only" (click)="toggleMenu()">
+    <mat-icon>{{ menuAberto ? 'close' : 'menu' }}</mat-icon>
+  </button>
 
   <mat-menu #prevencaoMenu="matMenu" class="krosis-menu">
     <button mat-menu-item routerLink="/entrada">
@@ -78,14 +85,6 @@
     </button>
   </mat-menu>
 
-  <span class="spacer"></span>
-
-  <div class="user-area" [matMenuTriggerFor]="usuarioMenu">
-    <span class="user-badge">{{ role() }}</span>
-    <span class="user-name">{{ nomeUsuario() }}</span>
-    <div class="avatar">{{ iniciais() }}</div>
-  </div>
-
   <mat-menu #usuarioMenu="matMenu" class="krosis-menu">
     <button mat-menu-item>
       <mat-icon>person</mat-icon> Perfil
@@ -97,3 +96,57 @@
   </mat-menu>
 
 </mat-toolbar>
+
+@if (menuAberto) {
+  <div class="mobile-overlay" (click)="fecharMenu()"></div>
+
+  <div class="mobile-drawer">
+
+    <div class="drawer-perfil">
+      <div class="avatar-lg">{{ iniciais() }}</div>
+      <div>
+        <strong>{{ nomeUsuario() }}</strong>
+        <span class="user-badge">{{ role() }}</span>
+      </div>
+    </div>
+
+    <div class="drawer-sep"></div>
+
+    <a class="drawer-item" routerLink="/dashboard" (click)="fecharMenu()">
+      <mat-icon>dashboard</mat-icon> Dashboard
+    </a>
+
+    <div class="drawer-group">
+      <span class="drawer-label">Prevenção</span>
+      <a class="drawer-item sub" routerLink="/entrada" (click)="fecharMenu()">
+        <mat-icon>qr_code_scanner</mat-icon> Entrada de Lotes
+      </a>
+    </div>
+
+    <div class="drawer-group">
+      <span class="drawer-label">Cadastro</span>
+      <a class="drawer-item sub" routerLink="/produtos"   (click)="fecharMenu()"><mat-icon>category</mat-icon> Produtos</a>
+      <a class="drawer-item sub" routerLink="/categorias" (click)="fecharMenu()"><mat-icon>label</mat-icon> Categorias</a>
+      <a class="drawer-item sub" routerLink="/fabricantes"(click)="fecharMenu()"><mat-icon>factory</mat-icon> Fabricantes</a>
+      <a class="drawer-item sub" routerLink="/usuarios"   (click)="fecharMenu()"><mat-icon>group</mat-icon> Usuários</a>
+    </div>
+
+    <div class="drawer-group">
+      <span class="drawer-label">Relatórios</span>
+      <a class="drawer-item sub" routerLink="/relatorios/vencimento"        (click)="fecharMenu()"><mat-icon>event_busy</mat-icon> Vencimento</a>
+      <a class="drawer-item sub" routerLink="/relatorios/vencidos"           (click)="fecharMenu()"><mat-icon>dangerous</mat-icon> Vencidos</a>
+      <a class="drawer-item sub" routerLink="/relatorios/movimentacoes"      (click)="fecharMenu()"><mat-icon>swap_vert</mat-icon> Movimentações</a>
+      <a class="drawer-item sub" routerLink="/relatorios/estoque"            (click)="fecharMenu()"><mat-icon>inventory</mat-icon> Estoque</a>
+      <a class="drawer-item sub" routerLink="/relatorios/por-categoria"      (click)="fecharMenu()"><mat-icon>label</mat-icon> Por Categoria</a>
+      <a class="drawer-item sub" routerLink="/relatorios/historico-operador" (click)="fecharMenu()"><mat-icon>manage_accounts</mat-icon> Histórico Operador</a>
+      <a class="drawer-item sub" routerLink="/relatorios/sem-movimentacao"   (click)="fecharMenu()"><mat-icon>warning_amber</mat-icon> Sem Movimentação</a>
+    </div>
+
+    <div class="drawer-sep"></div>
+
+    <button class="drawer-sair" (click)="sair()">
+      <mat-icon>logout</mat-icon> Sair
+    </button>
+
+  </div>
+}

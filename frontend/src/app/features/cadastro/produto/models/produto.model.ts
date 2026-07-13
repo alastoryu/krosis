@@ -7,8 +7,11 @@ export interface Produto {
   descricao?: string;
   codigoDeBarras: string;
 
-  categoria: Categoria;
-  fabricante: Fabricante;
+  categoriaId: number;
+  categoriaNome: string;
+
+  fabricanteId: number;
+  fabricanteNome: string;
 
   ativo: boolean;
 }

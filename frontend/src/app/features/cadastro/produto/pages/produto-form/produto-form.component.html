@@ -1,73 +1,189 @@
-<div class="container">
-  <mat-card class="form-card">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
-        {{ isEditMode ? 'Editar Produto' : 'Novo Produto' }}
-      </mat-card-title>
-    </mat-card-header>
+<div class="form-page">
+  <div class="form-page-header">
+    <div class="form-page-title">
+      <div class="form-page-icon azul">
+        <mat-icon>{{ isEditMode ? "edit" : "add_circle" }}</mat-icon>
+      </div>
+      <div>
+        <h2>{{ isEditMode ? "Editar Produto" : "Novo Produto" }}</h2>
+        <p>
+          {{
+            isEditMode
+              ? "Atualize as informações do produto"
+              : "Preencha os dados para cadastrar um novo produto"
+          }}
+        </p>
+      </div>
+    </div>
+    <button class="btn-voltar" type="button" (click)="onCancel()">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar
+    </button>
+  </div>
 
-    <mat-card-content>
-      <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()" class="produto-form">
+  <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <!--coluna principal-->
+      <div class="form-col">
+        <div class="form-card">
+          <div class="form-card-titulo">
+            <mat-icon>info</mat-icon>
+            <span>Informações básicas</span>
+          </div>
 
-        <!-- Nome -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nome do Produto</mat-label>
-          <input matInput formControlName="nome" placeholder="Digite o nome do produto">
-        </mat-form-field>
+          <div class="form-fields">
+            <div class="form-field">
+              <label>Nome do produto <span class="req">*</span></label>
+              <div
+                class="form-input-wrap"
+                [class.erro]="nome?.invalid && nome?.touched"
+              >
+                <mat-icon class="fi-icon">inventory_2</mat-icon>
+                <input
+                  type="text"
+                  formControlName="nome"
+                  placeholder="Ex: Arroz Integral 5kg"
+                />
+              </div>
+              @if (nome?.invalid && nome?.touched) {
+                <span class="msg-erro"
+                  >Nome é obrigatório (mínimo 2 caracteres)</span
+                >
+              }
+            </div>
 
-        <!-- Descrição -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Descrição</mat-label>
-          <textarea matInput formControlName="descricao" rows="3"></textarea>
-        </mat-form-field>
+            <div class="form-field">
+              <label>Descrição</label>
+              <div class="form-input-wrap textarea-wrap">
+                <mat-icon class="fi-icon">notes</mat-icon>
+                <textarea
+                  formControlName="descricao"
+                  rows="3"
+                  placeholder="Descrição opcional do produto"
+                ></textarea>
+              </div>
+            </div>
 
-        <!-- Código de Barras -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Código de Barras</mat-label>
-          <input matInput formControlName="codigoDeBarras" maxlength="13">
-        </mat-form-field>
+            <div class="form-field">
+              <label>Código de barras <span class="req">*</span></label>
+              <div
+                class="form-input-wrap"
+                [class.erro]="
+                  codigoDeBarras?.invalid && codigoDeBarras?.touched
+                "
+              >
+                <mat-icon class="fi-icon">barcode_reader</mat-icon>
+                <input
+                  type="text"
+                  formControlName="codigoDeBarras"
+                  placeholder="13 dígitos"
+                  maxlength="13"
+                />
+              </div>
+              @if (codigoDeBarras?.invalid && codigoDeBarras?.touched) {
+                <span class="form-msg-erro"
+                  >Informe um código EAN-13 válido (13 dígitos)</span
+                >
+              }
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!-- Categoria (OBJETO) -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Categoria</mat-label>
-          <mat-select formControlName="categoria">
-            <mat-option *ngFor="let cat of categorias" [value]="cat">
-              {{ cat.nome }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <!--coluna lateral-->
+      <div class="form-col lateral">
+        <div class="form-card">
+          <div class="form-card-titulo">
+            <mat-icon>category</mat-icon>
+            <span>Classificação</span>
+          </div>
 
-        <!-- Fabricante (OBJETO) -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Fabricante</mat-label>
-          <mat-select formControlName="fabricante">
-            <mat-option *ngFor="let fab of fabricantes" [value]="fab">
-              {{ fab.nome }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <div class="form-fields">
+            <div class="form-field">
+              <label>Categoria <span class="req">*</span></label>
+              <div
+                class="form-select-wrap"
+                [class.erro]="categoriaId?.invalid && categoriaId?.touched"
+              >
+                <mat-icon class="fi-icon">label</mat-icon>
+                <select formControlName="categoriaId">
+                  <option [ngValue]="null" disabled>
+                    Selecione a categoria
+                  </option>
+                  @for (c of categorias; track c.id) {
+                    <option [ngValue]="c.id">{{ c.nome }}</option>
+                  }
+                </select>
+                <mat-icon class="select-chevron">expand_more</mat-icon>
+              </div>
+              @if (categoriaId?.invalid && categoriaId?.touched) {
+                <span class="form-msg-erro">Selecione uma categoria</span>
+              }
+            </div>
 
-        <!-- Ativo -->
-        <div class="checkbox-container">
-          <mat-checkbox formControlName="ativo">
-            Produto ativo
-          </mat-checkbox>
+            <div class="form-field">
+              <label>Fabricante <span class="req">*</span></label>
+              <div
+                class="form-select-wrap"
+                [class.erro]="fabricanteId?.invalid && fabricanteId?.touched"
+              >
+                <mat-icon class="fi-icon">factory</mat-icon>
+                <select formControlName="fabricanteId">
+                  <option [ngValue]="null" disabled>
+                    Selecione o fabricante
+                  </option>
+                  @for (f of fabricantes; track f.id) {
+                    <option [ngValue]="f.id">{{ f.nome }}</option>
+                  }
+                </select>
+                <mat-icon class="select-chevron">expand_more</mat-icon>
+              </div>
+              @if (fabricanteId?.invalid && fabricanteId?.touched) {
+                <span class="msg-erro">Selecione um fabricante</span>
+              }
+            </div>
+          </div>
         </div>
 
-      </form>
-    </mat-card-content>
+        <div class="form-card">
+          <div class="form-card-titulo">
+            <mat-icon>settings</mat-icon>
+            <span>Configurações</span>
+          </div>
 
-    <mat-card-actions>
-      <button mat-button (click)="onCancel()">Cancelar</button>
+          <div class="form-toggle-row">
+            <div class="toggle-info">
+              <strong>Produto ativo</strong>
+              <span>Produto visível e disponível no sistema</span>
+            </div>
+            <label class="form-toggle">
+              <input type="checkbox" formControlName="ativo" />
+              <span class="track">
+                <span class="thumb"></span>
+              </span>
+            </label>
+          </div>
+        </div>
 
-      <button mat-raised-button color="primary"
-              (click)="onSubmit()"
-              [disabled]="loading || produtoForm.invalid">
-
-        {{ isEditMode ? 'Atualizar' : 'Salvar' }}
-      </button>
-    </mat-card-actions>
-
-  </mat-card>
+        <div class="form-acoes">
+          <button type="button" class="btn-cancelar" (click)="onCancel()">
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn-salvar"
+            [disabled]="loading || produtoForm.invalid"
+          >
+            @if (loading) {
+              <mat-spinner diameter="18"></mat-spinner>
+              <span>Salvando...</span>
+            } @else {
+              <mat-icon>{{ isEditMode ? "save" : "add_circle" }}</mat-icon>
+              <span>{{ isEditMode ? "Atualizar" : "Salvar produto" }}</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

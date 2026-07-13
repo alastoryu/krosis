@@ -17,6 +17,7 @@ import { MatIconModule } from "@angular/material/icon";
 
 import { FabricanteService } from "../../services/fabricante.service";
 import { Fabricante } from "../../models/fabricante.model";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
   selector: "app-fabricante-form",
@@ -30,6 +31,7 @@ import { Fabricante } from "../../models/fabricante.model";
     MatButtonModule,
     MatCardModule,
     MatIconModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: "./fabricante-form.component.html",
   styleUrls: ["./fabricante-form.component.scss"],

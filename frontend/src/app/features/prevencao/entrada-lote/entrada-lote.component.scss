@@ -31,7 +31,6 @@ $radius:  14px;
   gap: 1.25rem;
 }
 
-// ── header ────────────────────────────────────────────────────────────────
 .card-header {
   display: flex;
   align-items: center;
@@ -55,7 +54,6 @@ $radius:  14px;
   mat-icon { color: $dim; font-size: 22px; }
 }
 
-// ── scanner ───────────────────────────────────────────────────────────────
 .scanner-area {
   width: 100%;
   height: 200px;
@@ -111,7 +109,7 @@ $radius:  14px;
   span { font-size: .8rem; }
 }
 
-.btn-cancelar-scan {
+.botao-cancelar-scan {
   position: absolute;
   bottom: .75rem;
   left: 50%;
@@ -129,8 +127,7 @@ $radius:  14px;
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
 }
 
-// ── botões ────────────────────────────────────────────────────────────────
-.btn-primary {
+.botao-primary {
   width: 100%;
   height: 48px;
   border: none;
@@ -154,7 +151,7 @@ $radius:  14px;
   mat-spinner { --mdc-circular-progress-active-indicator-color: #fff; }
 }
 
-.btn-secondary {
+.botao-secondary {
   width: 48px;
   height: 48px;
   border: 1.5px solid #d8e0ea;
@@ -168,10 +165,9 @@ $radius:  14px;
   transition: border-color .15s;
 
   &:hover { border-color: $dim; }
-  mat-icon { color: $muted; }
+  mat-icon { color: $muted}
 }
 
-// ── divider ───────────────────────────────────────────────────────────────
 .divider {
   display: flex;
   align-items: center;
@@ -187,7 +183,6 @@ $radius:  14px;
   }
 }
 
-// ── inputs ────────────────────────────────────────────────────────────────
 .input-group {
   display: flex;
   gap: .5rem;
@@ -203,6 +198,7 @@ $radius:  14px;
   border-radius: 10px;
   padding: 0 .85rem;
   transition: border-color .15s, box-shadow .15s;
+  height: 48px;
 
   &:focus-within {
     border-color: $dim;
@@ -226,7 +222,6 @@ $radius:  14px;
   }
 }
 
-// ── produto encontrado ────────────────────────────────────────────────────
 .produto-encontrado {
   display: flex;
   align-items: center;
@@ -250,7 +245,7 @@ $radius:  14px;
   }
 }
 
-.btn-trocar {
+.botao-trocar {
   background: none;
   border: none;
   cursor: pointer;
@@ -263,7 +258,6 @@ $radius:  14px;
   &:hover { color: $text; }
 }
 
-// ── form fields ───────────────────────────────────────────────────────────
 .form-fields {
   display: flex;
   flex-direction: column;
@@ -278,4 +272,4 @@ $radius:  14px;
   label { font-size: .75rem; font-weight: 600; color: #3d4f63; }
 }
 
-.btn-salvar { gap: .5rem; }
+.botao-salvar { gap: .5rem; }

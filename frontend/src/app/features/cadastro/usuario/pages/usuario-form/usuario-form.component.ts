@@ -18,6 +18,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
   selector: "app-usuario-form",
@@ -32,6 +33,7 @@ import { MatSelectModule } from "@angular/material/select";
     MatCardModule,
     MatIconModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: "./usuario-form.component.html",
   styleUrls: ["./usuario-form.component.scss"],
@@ -44,6 +46,7 @@ export class UsuarioFormComponent implements OnInit {
   id?: number;
 
   hidePassword = true;
+  senhaVisivel = false;
 
   constructor(
     private fb: FormBuilder,
@@ -117,5 +120,11 @@ export class UsuarioFormComponent implements OnInit {
   }
   get senha() {
     return this.usuarioForm.get("senha");
+  }
+  get role() {
+    return this.usuarioForm.get("role");
+  }
+  get ativo() {
+    return this.usuarioForm.get("ativo");
   }
 }

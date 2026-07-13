@@ -17,6 +17,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { Produto } from "../../cadastro/produto/models/produto.model";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-entrada-lote",
@@ -35,7 +36,7 @@ import { Produto } from "../../cadastro/produto/models/produto.model";
   styleUrl: "./entrada-lote.component.scss",
 })
 export class EntradaLoteComponent implements OnDestroy {
-  private readonly API = "http://localhost:8081/api";
+  private readonly API = `${environment.apiUrl}/api`;
   private reader = new BrowserMultiFormatReader();
   private controls?: IScannerControls;
 

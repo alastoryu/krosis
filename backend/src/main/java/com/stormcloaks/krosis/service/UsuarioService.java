@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder; // ← injeta o BCrypt do SecurityConfig
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
                           PasswordEncoder passwordEncoder) {
@@ -42,7 +42,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
-        usuario.setSenha(passwordEncoder.encode(dto.getSenha())); // ← hash aqui
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         usuario.setAtivo(dto.getAtivo() != null ? dto.getAtivo() : true);
         usuario.setRole(Usuario.Role.valueOf(dto.getRole()));
 
@@ -55,9 +55,8 @@ public class UsuarioService {
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
 
-        // Só atualiza senha se vier preenchida — e sempre com hash
         if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
-            usuario.setSenha(passwordEncoder.encode(dto.getSenha())); // ← hash aqui
+            usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
 
         usuario.setAtivo(dto.getAtivo());
@@ -73,8 +72,6 @@ public class UsuarioService {
         }
         usuarioRepository.deleteById(id);
     }
-
-    // ── helpers ─────────────────────────────────────────────────────────────
 
     private Usuario buscarEntidade(Long id) {
         return usuarioRepository.findById(id)

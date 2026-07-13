@@ -11,83 +11,54 @@ $accent: #4fc3f7;
   align-items: center;
   padding: 0 1.25rem;
   position: fixed;
-  bottom: 0;
-  left: 0;
+  bottom: 0; left: 0;
   width: 100%;
   z-index: 1000;
-}
 
-// ── esquerda ───────────────────────────────────────────────────────────────
-.footer-left {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-}
-
-.footer-icon {
-  width: 22px;
-  height: 22px;
-  background: rgba($accent, .1);
-  border: 1px solid rgba($accent, .2);
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  mat-icon {
-    font-size: 13px;
-    width: 13px;
-    height: 13px;
-    color: $accent;
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    height: 44px;
   }
 }
 
+.footer-left {
+  display: flex; align-items: center; gap: .5rem;
+}
+
+.footer-icon {
+  width: 20px; height: 20px;
+  background: rgba($accent, .1); border: 1px solid rgba($accent, .2);
+  border-radius: 5px; display: flex; align-items: center; justify-content: center;
+
+  mat-icon { font-size: 12px; width: 12px; height: 12px; color: $accent; }
+
+  @media (max-width: 768px) { display: none; }
+}
+
 .footer-brand {
-  font-size: .78rem;
-  font-weight: 700;
-  color: rgba(#fff, .5);
-  letter-spacing: -.1px;
+  font-size: .78rem; font-weight: 700;
+  color: rgba(#fff, .5); letter-spacing: -.1px;
 }
 
 .footer-sep {
-  width: 1px;
-  height: 12px;
-  background: rgba(#fff, .1);
-  margin: 0 .5rem;
+  width: 1px; height: 12px;
+  background: rgba(#fff, .1); margin: 0 .5rem;
+
+  @media (max-width: 768px) { display: none; }
 }
 
 .footer-copy {
-  font-size: .75rem;
-  color: rgba(#fff, .3);
+  font-size: .75rem; color: rgba(#fff, .3);
+
+  @media (max-width: 768px) { font-size: .7rem; }
 }
 
-// ── direita ────────────────────────────────────────────────────────────────
 .footer-right {
   margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-}
-
-.footer-link {
-  font-size: .75rem;
-  color: rgba(#fff, .3);
-  text-decoration: none;
-  transition: color .15s;
-
-  &:hover { color: rgba($accent, .8); }
-}
-
-.footer-dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(#fff, .15);
+  display: flex; align-items: center; gap: .75rem;
 }
 
 .footer-version {
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  color: rgba($accent, .4);
+  font-size: .7rem; font-weight: 700;
+  letter-spacing: .06em; color: rgba($accent, .4);
 }

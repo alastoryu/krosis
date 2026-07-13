@@ -1,102 +1,132 @@
-<div class="container">
-  <mat-card class="form-card">
+<div class="form-page">
 
-    <mat-card-header>
-      <mat-card-title class="title">
+  <div class="form-page-header">
+    <div class="form-page-title">
+      <div class="form-page-icon cinza">
         <mat-icon>{{ isEditMode ? 'edit' : 'person_add' }}</mat-icon>
-        {{ isEditMode ? 'Editar Usuário' : 'Novo Usuário' }}
-      </mat-card-title>
-    </mat-card-header>
+      </div>
+      <div>
+        <h2>{{ isEditMode ? 'Editar Usuário' : 'Novo Usuário' }}</h2>
+        <p>{{ isEditMode ? 'Atualize as informações do usuário' : 'Preencha os dados para cadastrar um novo usuário' }}</p>
+      </div>
+    </div>
+    <button class="btn-voltar" type="button" (click)="onCancel()">
+      <mat-icon>arrow_back</mat-icon> Voltar
+    </button>
+  </div>
 
-    <mat-card-content>
-      <form [formGroup]="usuarioForm" class="usuario-form">
+  <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <div class="form-col">
 
-        <!-- Nome -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nome</mat-label>
-          <input matInput formControlName="nome" placeholder="Digite o nome completo">
-          <mat-error *ngIf="nome?.hasError('required')">
-            Nome é obrigatório
-          </mat-error>
-        </mat-form-field>
+        <div class="form-card">
+          <div class="form-card-titulo">
+            <mat-icon>person</mat-icon>
+            <span>Dados pessoais</span>
+          </div>
+          <div class="form-fields">
 
-        <!-- Email -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" placeholder="exemplo@email.com">
+            <div class="form-field">
+              <label>Nome completo <span class="req">*</span></label>
+              <div class="form-input-wrap" [class.erro]="nome?.invalid && nome?.touched">
+                <mat-icon class="fi-icon">person</mat-icon>
+                <input type="text" formControlName="nome" placeholder="Ex: João da Silva" />
+              </div>
+              @if (nome?.invalid && nome?.touched) {
+                <span class="form-msg-erro">Nome é obrigatório</span>
+              }
+            </div>
 
-          <mat-error *ngIf="email?.hasError('required')">
-            Email é obrigatório
-          </mat-error>
+            <div class="form-field">
+              <label>E-mail <span class="req">*</span></label>
+              <div class="form-input-wrap" [class.erro]="email?.invalid && email?.touched">
+                <mat-icon class="fi-icon">mail</mat-icon>
+                <input type="email" formControlName="email" placeholder="Ex: joao@email.com" />
+              </div>
+              @if (email?.invalid && email?.touched) {
+                <span class="form-msg-erro">Informe um e-mail válido</span>
+              }
+            </div>
 
-          <mat-error *ngIf="email?.hasError('email')">
-            Email inválido
-          </mat-error>
-        </mat-form-field>
+            <div class="form-field">
+              <label>{{ isEditMode ? 'Nova senha (deixe vazio para manter)' : 'Senha' }} {{ !isEditMode ? '*' : '' }}</label>
+              <div class="form-input-wrap" [class.erro]="senha?.invalid && senha?.touched">
+                <mat-icon class="fi-icon">lock</mat-icon>
+                <input [type]="senhaVisivel ? 'text' : 'password'"
+                       formControlName="senha"
+                       placeholder="{{ isEditMode ? 'Digite para alterar...' : 'Mínimo 6 caracteres' }}" />
+                <button type="button" class="btn-olho" (click)="senhaVisivel = !senhaVisivel">
+                  <mat-icon>{{ senhaVisivel ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+              </div>
+              @if (senha?.invalid && senha?.touched) {
+                <span class="form-msg-erro">Senha deve ter no mínimo 6 caracteres</span>
+              }
+            </div>
 
-        <!-- Senha -->
-        <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
-          <mat-label>Senha</mat-label>
-
-          <input matInput
-                 [type]="hidePassword ? 'password' : 'text'"
-                 formControlName="senha">
-
-          <button mat-icon-button
-                  matSuffix
-                  type="button"
-                  (click)="hidePassword = !hidePassword">
-
-            <mat-icon>
-              {{ hidePassword ? 'visibility_off' : 'visibility' }}
-            </mat-icon>
-          </button>
-
-          <mat-error *ngIf="senha?.hasError('required')">
-            Senha é obrigatória
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Perfil -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Perfil</mat-label>
-          <mat-select formControlName="role">
-            <mat-option value="USER">Usuário</mat-option>
-            <mat-option value="ADMIN">Administrador</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- Ativo -->
-        <div class="checkbox-container">
-          <mat-checkbox formControlName="ativo">
-            Usuário ativo
-          </mat-checkbox>
+          </div>
         </div>
 
-      </form>
-    </mat-card-content>
+      </div>
 
-    <mat-card-actions class="card-actions">
+      <div class="form-col lateral">
 
-      <button mat-button type="button" (click)="onCancel()" [disabled]="loading">
-        <mat-icon>close</mat-icon>
-        Cancelar
-      </button>
+        <div class="form-card">
+          <div class="form-card-titulo">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Permissões</span>
+          </div>
+          <div class="form-fields">
 
-      <button mat-raised-button
-              color="primary"
-              type="button"
-              (click)="onSubmit()"
-              [disabled]="loading || usuarioForm.invalid">
+            <div class="form-field">
+              <label>Perfil <span class="req">*</span></label>
+              <div class="form-select-wrap" [class.erro]="role?.invalid && role?.touched">
+                <mat-icon class="fi-icon">shield</mat-icon>
+                <select formControlName="role">
+                  <option value="" disabled>Selecione o perfil</option>
+                  <option value="USER">Usuário</option>
+                  <option value="ADMIN">Administrador</option>
+                </select>
+                <mat-icon class="select-chevron">expand_more</mat-icon>
+              </div>
+              @if (role?.invalid && role?.touched) {
+                <span class="form-msg-erro">Selecione um perfil</span>
+              }
+            </div>
 
-        <mat-icon>
-          {{ loading ? 'hourglass_top' : 'save' }}
-        </mat-icon>
+          </div>
+        </div>
 
-        {{ loading ? 'Salvando...' : (isEditMode ? 'Atualizar' : 'Salvar') }}
-      </button>
+        <div class="form-card">
+          <div class="form-card-titulo">
+            <mat-icon>settings</mat-icon>
+            <span>Configurações</span>
+          </div>
+          <div class="form-toggle-row">
+            <div>
+              <strong>Usuário ativo</strong>
+              <span>Usuário pode acessar o sistema</span>
+            </div>
+            <label class="form-toggle">
+              <input type="checkbox" formControlName="ativo" />
+              <span class="track"><span class="thumb"></span></span>
+            </label>
+          </div>
+        </div>
 
-    </mat-card-actions>
+        <div class="form-acoes">
+          <button type="button" class="btn-cancelar" (click)="onCancel()">Cancelar</button>
+          <button type="submit" class="btn-salvar" [disabled]="loading || usuarioForm.invalid">
+            @if (loading) {
+              <mat-spinner diameter="18"></mat-spinner><span>Salvando...</span>
+            } @else {
+              <mat-icon>{{ isEditMode ? 'save' : 'person_add' }}</mat-icon>
+              <span>{{ isEditMode ? 'Atualizar' : 'Salvar usuário' }}</span>
+            }
+          </button>
+        </div>
 
-  </mat-card>
+      </div>
+    </div>
+  </form>
 </div>

@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,31 +12,32 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-header',
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    MatDividerModule,
+    CommonModule, RouterModule,
+    MatToolbarModule, MatButtonModule,
+    MatMenuModule, MatIconModule, MatDividerModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
+
+  menuAberto = false;
+
   nomeUsuario = computed(() => this.auth.nomeUsuario());
   role        = computed(() => this.auth.role());
   iniciais    = computed(() => {
-    const nome = this.auth.nomeUsuario();
-    return nome
-      .split(' ')
-      .slice(0, 2)
-      .map(n => n[0])
-      .join('')
-      .toUpperCase();
+    return this.auth.nomeUsuario()
+      .split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
   });
 
   constructor(private auth: AuthService) {}
 
-  sair() { this.auth.logout(); }
+  toggleMenu() { this.menuAberto = !this.menuAberto; }
+  fecharMenu() { this.menuAberto = false; }
+  sair()       { this.fecharMenu(); this.auth.logout(); }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (window.innerWidth > 768) this.menuAberto = false;
+  }
 }

@@ -1,45 +1,33 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { UsuarioService } from "../../services/usuario.service";
-import { Usuario } from "../../../../../core/models/usuario.model";
-
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { Router, RouterModule } from "@angular/router";
+import { Router } from "@angular/router";
+import { filter, finalize, switchMap } from "rxjs";
 
-import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
-import { MatChipsModule } from "@angular/material/chips";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
-import { MatSelectModule } from "@angular/material/select";
-import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-
-import { filter, finalize, switchMap } from "rxjs/operators";
+import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatSort, MatSortModule } from "@angular/material/sort";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTooltipModule } from "@angular/material/tooltip";
+
+import { UsuarioService } from "../../services/usuario.service";
 import { ConfirmDialogService } from "../../../../../core/services/confirm-dialog.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Usuario } from "../../../../../core/models/usuario.model";
 
 @Component({
   selector: "app-usuario-list",
   standalone: true,
   imports: [
-    MatSelectModule,
-    FormsModule,
     CommonModule,
+    FormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatButtonModule,
     MatIconModule,
-    MatCardModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatChipsModule,
-    RouterModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
   ],
@@ -47,24 +35,15 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   styleUrls: ["./usuario-list.component.scss"],
 })
 export class UsuarioListComponent implements OnInit, AfterViewInit {
-  usuarios: Usuario[] = [];
-
-  displayedColumns: string[] = [
-    "id",
-    "nome",
-    "email",
-    "role",
-    "ativo",
-    "acoes",
-  ];
+  displayedColumns = ["id", "nome", "email", "role", "ativo", "acoes"];
   dataSource = new MatTableDataSource<Usuario>([]);
+  loading = false;
 
   totalElements = 0;
   pageSize = 10;
   pageIndex = 0;
 
-  loading = false;
-  error = false;
+  filtroNome = "";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -76,74 +55,85 @@ export class UsuarioListComponent implements OnInit, AfterViewInit {
     private router: Router,
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.carregarUsuarios();
   }
 
-  ngAfterViewInit(): void {
-    if (this.paginator) {
-      this.paginator.page.subscribe(() => {
-        this.pageIndex = this.paginator.pageIndex;
-        this.pageSize = this.paginator.pageSize;
-        this.carregarUsuarios();
-      });
-    }
+  ngAfterViewInit() {
+    this.paginator?.page.subscribe(() => {
+      this.pageIndex = this.paginator.pageIndex;
+      this.pageSize = this.paginator.pageSize;
+      this.carregarUsuarios();
+    });
 
-    if (this.sort) {
-      this.sort.sortChange.subscribe(() => {
-        this.pageIndex = 0;
-        this.carregarUsuarios();
-      });
-    }
+    this.sort?.sortChange.subscribe(() => {
+      this.pageIndex = 0;
+      this.carregarUsuarios();
+    });
   }
 
-  carregarUsuarios(): void {
+  carregarUsuarios() {
     this.loading = true;
-    this.error = false;
-
     this.usuarioService
-      .listarUsuarios()
+      .listarUsuarios({
+        page: this.pageIndex,
+        size: this.pageSize,
+        nome: this.filtroNome || undefined,
+      })
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: (data) => {
-          this.usuarios = data.content;
+        next: (page) => {
+          this.dataSource.data = page.content;
+          this.totalElements = page.totalElements;
+          if (this.paginator) {
+            this.paginator.length = page.totalElements;
+            this.paginator.pageIndex = page.number;
+            this.paginator.pageSize = page.size;
+          }
         },
-        error: () => {
-          this.error = true;
-        },
+        error: () => this.showMessage("Erro ao carregar usuários"),
       });
+  }
+
+  limparFiltros() {
+    this.filtroNome = "";
+    this.pageIndex = 0;
+    this.carregarUsuarios();
   }
 
   novoUsuario() {
     this.router.navigate(["/usuarios/novo"]);
   }
-
-  editarUsuario(usuario: Usuario) {
-    this.router.navigate(["/usuarios/editar", usuario.id]);
+  editarUsuario(u: Usuario) {
+    this.router.navigate(["/usuarios/editar", u.id]);
   }
 
-  excluirUsuario(usuario: Usuario): void {
+  excluirUsuario(u: Usuario) {
     this.confirmDialog
-      .confirmDelete(usuario.nome)
+      .confirmDelete(u.nome ?? "")
       .pipe(
         filter(Boolean),
-        switchMap(() => this.usuarioService.excluirUsuario(usuario.id)),
+        switchMap(() => this.usuarioService.excluirUsuario(u.id!)),
       )
       .subscribe({
         next: () => {
-          this.showMessage("Usuário excluído com sucesso!");
+          this.showMessage("Usuário excluído!");
           this.carregarUsuarios();
         },
-        error: (error) => {
-          console.error(error);
-          this.showMessage("Erro ao excluir usuário");
-        },
+        error: () => this.showMessage("Erro ao excluir usuário"),
       });
   }
 
-  private showMessage(message: string) {
-    this.snackBar.open(message, "Fechar", {
-      duration: 3000,
-    });
+  iniciais(nome: string = "") {
+    return nome
+      .split(" ")
+      .slice(0, 2)
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  }
+
+  private showMessage(msg: string) {
+    this.snackBar.open(msg, "Fechar", { duration: 3000 });
   }
 }

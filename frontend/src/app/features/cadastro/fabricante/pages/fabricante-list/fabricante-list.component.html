@@ -93,13 +93,15 @@
         </ng-container>
 
         <ng-container matColumnDef="paisOrigem">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>
-            País de Origem
-          </mat-header-cell>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>País de Origem</th>
 
-          <mat-cell *matCellDef="let fabricante">
-            {{ fabricante.paisOrigem || "-" }}
-          </mat-cell>
+          <td mat-cell *matCellDef="let c">
+            <div class="produto-cell">
+              @if (c.paisOrigem) {
+                <span class="descricao">{{ c.paisOrigem || "-" }}</span>
+              }
+            </div>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="ativo">

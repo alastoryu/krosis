@@ -14,117 +14,150 @@
       Novo Usuário
     </button>
   </div>
-  <div class="container">
-    <div class="tabela-card">
-      @if (loading) {
-        <div class="estado">
-          <mat-spinner diameter="40"></mat-spinner>
-          <p>Carregando usuários...</p>
+
+  <!-- filtro -->
+  <div class="filtros-card">
+    <div class="filtros-grid">
+      <div class="field">
+        <label>Nome ou e-mail</label>
+        <div class="input-wrap">
+          <mat-icon class="input-icon">search</mat-icon>
+          <input
+            type="text"
+            [(ngModel)]="filtroNome"
+            placeholder="Buscar por nome ou e-mail..."
+            (keyup.enter)="carregarUsuarios()"
+          />
         </div>
-      }
-
-      @if (!loading && dataSource.data.length === 0) {
-        <div class="estado">
-          <div class="estado-icon"><mat-icon>label</mat-icon></div>
-          <h3>Nenhum usuário encontrado</h3>
-          <p>Tente ajustar os filtros ou adicione um novo usuário</p>
-          <button class="btn-novo" (click)="novoUsuario()">
-            <mat-icon>add</mat-icon> Adicionar Usuário
-          </button>
-        </div>
-      }
-
-      @if (!loading && dataSource.data.length > 0) {
-        <div class="tabela-info">
-          <span
-            >Mostrando <strong>{{ dataSource.data.length }}</strong> de
-            <strong>{{ totalElements }}</strong> categorias</span
-          >
-        </div>
-
-        <table mat-table [dataSource]="dataSource" matSort class="tabela">
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
-            <td mat-cell *matCellDef="let c">
-              <span class="id-badge">{{ c.id }}</span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="nome">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
-            <td mat-cell *matCellDef="let c">
-              <div class="produto-cell">
-                <strong>{{ c.nome }}</strong>
-                @if (c.descricao) {
-                  <span class="descricao">{{ c.descricao }}</span>
-                }
-              </div>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td mat-cell *matCellDef="let u">{{ u.email }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="role">
-            <th mat-header-cell *matHeaderCellDef>Perfil</th>
-            <td mat-cell *matCellDef="let u">
-              <span class="role" [ngClass]="u.role">
-                {{ u.role }}
-              </span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="ativo">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-            <td mat-cell *matCellDef="let c">
-              <span [class]="c.ativo ? 'chip-ativo' : 'chip-inativo'">
-                <span class="chip-dot"></span>
-                {{ c.ativo ? "Ativo" : "Inativo" }}
-              </span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="acoes">
-            <th mat-header-cell *matHeaderCellDef>Ações</th>
-            <td mat-cell *matCellDef="let c">
-              <div class="acoes">
-                <button
-                  class="btn-acao editar"
-                  (click)="editarUsuario(c)"
-                  matTooltip="Editar usuário"
-                >
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button
-                  class="btn-acao excluir"
-                  (click)="excluirUsuario(c)"
-                  matTooltip="Excluir usuário"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            class="table-row"
-          ></tr>
-        </table>
-
-        <mat-paginator
-          [length]="totalElements"
-          [pageSize]="pageSize"
-          [pageIndex]="pageIndex"
-          [pageSizeOptions]="[5, 10, 20, 50]"
-          showFirstLastButtons
-        >
-        </mat-paginator>
-      }
+      </div>
     </div>
+    <div class="filtros-acoes">
+      <button
+        class="btn-buscar"
+        (click)="carregarUsuarios()"
+        [disabled]="loading"
+      >
+        <mat-icon>search</mat-icon> Buscar
+      </button>
+      <button class="btn-limpar" (click)="limparFiltros()" [disabled]="loading">
+        <mat-icon>restart_alt</mat-icon> Limpar
+      </button>
+    </div>
+  </div>
+
+  <!-- tabela -->
+  <div class="tabela-card">
+    @if (loading) {
+      <div class="estado">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Carregando usuários...</p>
+      </div>
+    }
+
+    @if (!loading && dataSource.data.length === 0) {
+      <div class="estado">
+        <div class="estado-icon"><mat-icon>people</mat-icon></div>
+        <h3>Nenhum usuário encontrado</h3>
+        <p>Tente ajustar os filtros ou adicione um novo usuário</p>
+        <button class="btn-novo" (click)="novoUsuario()">
+          <mat-icon>add</mat-icon> Adicionar Usuário
+        </button>
+      </div>
+    }
+
+    @if (!loading && dataSource.data.length > 0) {
+      <div class="tabela-info">
+        <span
+          >Mostrando <strong>{{ dataSource.data.length }}</strong> de
+          <strong>{{ totalElements }}</strong> usuários</span
+        >
+      </div>
+
+      <table mat-table [dataSource]="dataSource" matSort class="usuarios-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+          <td mat-cell *matCellDef="let u">
+            <span class="id-badge">{{ u.id }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+          <td mat-cell *matCellDef="let u">
+            <div class="usuario-cell">
+              <div class="avatar-mini">{{ iniciais(u.nome) }}</div>
+              <strong>{{ u.nome }}</strong>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>E-mail</th>
+          <td mat-cell *matCellDef="let u">
+            <span class="email-cell">{{ u.email }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Perfil</th>
+          <td mat-cell *matCellDef="let u">
+            <span [class]="u.role === 'ADMIN' ? 'chip-admin' : 'chip-user'">
+              <mat-icon>{{
+                u.role === "ADMIN" ? "admin_panel_settings" : "person"
+              }}</mat-icon>
+              {{ u.role === "ADMIN" ? "Admin" : "Usuário" }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ativo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let u">
+            <span [class]="u.ativo ? 'chip-ativo' : 'chip-inativo'">
+              <span class="chip-dot"></span>
+              {{ u.ativo ? "Ativo" : "Inativo" }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let u">
+            <div class="acoes">
+              <button
+                class="btn-acao editar"
+                (click)="editarUsuario(u)"
+                matTooltip="Editar usuário"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                class="btn-acao excluir"
+                (click)="excluirUsuario(u)"
+                matTooltip="Excluir usuário"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="table-row"
+        ></tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalElements"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    }
   </div>
 </div>

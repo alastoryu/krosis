@@ -10,7 +10,7 @@ import { environment } from "../../../../environments/environment";
   providedIn: "root",
 })
 export class FabricanteService {
-  private readonly API = `${environment.apiUrl}/fabricantes`;
+  private readonly API = `${environment.apiUrl}/api/fabricantes`;
 
   constructor(private http: HttpClient) {}
 

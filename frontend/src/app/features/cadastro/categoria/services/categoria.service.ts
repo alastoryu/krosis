@@ -11,7 +11,7 @@ import { CreateCategoriaDTO } from "../models/categoria-create.model";
   providedIn: "root",
 })
 export class CategoriaService {
-  private readonly API = `${environment.apiUrl}/categorias`;
+  private readonly API = `${environment.apiUrl}/api/categorias`;
 
   constructor(private http: HttpClient) {}
 

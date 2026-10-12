@@ -10,7 +10,7 @@ import { Produto } from "../models/produto.model";
   providedIn: "root",
 })
 export class ProdutoService {
-  private readonly API = `${environment.apiUrl}/produtos`;
+  private readonly API = `${environment.apiUrl}/api/produtos`;
 
   constructor(private http: HttpClient) {}
 

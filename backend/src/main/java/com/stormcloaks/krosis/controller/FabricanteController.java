@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/fabricantes")
+@RequestMapping("/api/fabricantes")
 public class FabricanteController {
 
     @Autowired private FabricanteService fabricanteService;

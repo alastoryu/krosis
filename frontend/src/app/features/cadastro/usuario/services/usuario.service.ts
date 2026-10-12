@@ -9,7 +9,7 @@ import { environment } from "../../../../environments/environment";
   providedIn: "root",
 })
 export class UsuarioService {
-  private readonly API = `${environment.apiUrl}/usuarios`;
+  private readonly API = `${environment.apiUrl}/api/usuarios`;
 
   constructor(private http: HttpClient) {}
 

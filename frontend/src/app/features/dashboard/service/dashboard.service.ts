@@ -8,7 +8,7 @@ import { DashboardResumo } from "../models/dashboard-resumo";
   providedIn: "root",
 })
 export class DashboardService {
-  private readonly API = `${environment.apiUrl}/dashboard`;
+  private readonly API = `${environment.apiUrl}/api/dashboard`;
 
   constructor(private http: HttpClient) {}
 

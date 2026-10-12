@@ -1,7 +1,5 @@
 <div class="entrada-page">
-
   <div class="entrada-card">
-
     <div class="card-header">
       <div class="card-icon"><mat-icon>qr_code_scanner</mat-icon></div>
       <div>
@@ -10,17 +8,26 @@
       </div>
     </div>
 
-    @if (etapa() === 'scan') {
-
+    @if (etapa() === "scan") {
       <!-- área do scanner -->
       <div class="scanner-area" [class.ativo]="scanAtivo()">
         @if (scanAtivo()) {
-          <video #videoEl class="scanner-video" autoplay muted playsinline></video>
+          <video
+            #videoEl
+            class="scanner-video"
+            autoplay
+            muted
+            playsinline
+            (click)="focarNoToque()"
+          ></video>
           <div class="scan-overlay">
             <div class="scan-line"></div>
           </div>
           <button class="botao-cancelar-scan" (click)="pararScan()">
             <mat-icon>close</mat-icon> Cancelar
+          </button>
+          <button class="botao-trocar-camera" (click)="trocarCamera()">
+            <mat-icon>flip_camera_android</mat-icon>
           </button>
         } @else {
           <div class="scanner-placeholder">
@@ -30,7 +37,11 @@
         }
       </div>
 
-      <button class="botao-primary" (click)="iniciarScan()" [disabled]="scanAtivo() || buscando()">
+      <button
+        class="botao-primary"
+        (click)="iniciarScan()"
+        [disabled]="scanAtivo() || buscando()"
+      >
         <mat-icon>qr_code_scanner</mat-icon>
         Escanear código de barras
       </button>
@@ -41,11 +52,18 @@
       <div class="input-group">
         <div class="input-wrap">
           <mat-icon class="input-icon">barcode_reader</mat-icon>
-          <input type="text" [(ngModel)]="codigoManual"
-                 placeholder="Digite o código manualmente"
-                 (keyup.enter)="buscarManual()" />
+          <input
+            type="text"
+            [(ngModel)]="codigoManual"
+            placeholder="Digite o código manualmente"
+            (keyup.enter)="buscarManual()"
+          />
         </div>
-        <button class="botao-secondary" (click)="buscarManual()" [disabled]="buscando()">
+        <button
+          class="botao-secondary"
+          (click)="buscarManual()"
+          [disabled]="buscando()"
+        >
           @if (buscando()) {
             <mat-spinner diameter="18"></mat-spinner>
           } @else {
@@ -55,8 +73,7 @@
       </div>
     }
 
-    @if (etapa() === 'form' && produto()) {
-
+    @if (etapa() === "form" && produto()) {
       <div class="produto-encontrado">
         <mat-icon>check_circle</mat-icon>
         <div>
@@ -70,12 +87,15 @@
       </div>
 
       <div class="form-fields">
-
         <div class="field">
           <label>Número do lote</label>
           <div class="input-wrap">
             <mat-icon class="input-icon">tag</mat-icon>
-            <input type="text" [(ngModel)]="numeroLote" placeholder="Ex: LOT-2026-001" />
+            <input
+              type="text"
+              [(ngModel)]="numeroLote"
+              placeholder="Ex: LOT-2026-001"
+            />
           </div>
         </div>
 
@@ -91,13 +111,21 @@
           <label>Quantidade</label>
           <div class="input-wrap">
             <mat-icon class="input-icon">inventory_2</mat-icon>
-            <input type="number" [(ngModel)]="quantidade" placeholder="0" min="1" />
+            <input
+              type="number"
+              [(ngModel)]="quantidade"
+              placeholder="0"
+              min="1"
+            />
           </div>
         </div>
-
       </div>
 
-      <button class="botao-primary botao-salvar" (click)="salvar()" [disabled]="salvando()">
+      <button
+        class="botao-primary botao-salvar"
+        (click)="salvar()"
+        [disabled]="salvando()"
+      >
         @if (salvando()) {
           <mat-spinner diameter="20"></mat-spinner>
           <span>Salvando...</span>
@@ -106,8 +134,6 @@
           <span>Registrar entrada</span>
         }
       </button>
-
     }
-
   </div>
 </div>

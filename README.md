@@ -1,128 +1,83 @@
 # 🥬 Sistema de Gestão de Produtos Perecíveis
 
-Sistema web e mobile desenvolvido para gerenciamento de produtos perecíveis no varejo, permitindo o controle de validade por lote, monitoramento de estoque, emissão de alertas e geração de relatórios gerenciais.
+Sistema web para gerenciamento de produtos perecíveis no varejo, que permite cadastrar produtos, fabricantes e categorias e registrar a entrada de lotes com suas datas de validade, identificando o usuário responsável por cada registro.
 
 ## 📋 Sobre o Projeto
 
-O controle de produtos perecíveis é um dos maiores desafios do setor varejista e da indústria alimentícia. Muitos estabelecimentos ainda realizam o acompanhamento das datas de validade manualmente, tornando o processo lento, sujeito a erros e aumentando o desperdício de mercadorias.
+O controle de produtos perecíveis é um dos maiores desafios do setor varejista e da indústria alimentícia. Muitos estabelecimentos ainda acompanham as datas de validade manualmente, o que torna o processo lento, sujeito a erros e aumenta o desperdício de mercadorias.
 
-Este projeto tem como objetivo fornecer uma solução moderna para gerenciamento de produtos perecíveis, automatizando o controle de validade e auxiliando na tomada de decisões através de dashboards, alertas e relatórios personalizados.
+Este projeto é o desenvolvimento do Trabalho de Conclusão de Curso (TCC) de **Christopher Ryuhei Nitta** e oferece uma base para controlar a validade **por lote**, centralizando as informações de produto, fabricante, categoria, lote e validade.
 
 ---
 
 ## 🎯 Objetivos
 
-* Automatizar o controle de validade de produtos.
-* Reduzir perdas por vencimento.
-* Facilitar o cadastro e gerenciamento de produtos.
-* Melhorar o controle de estoque.
-* Agilizar processos utilizando leitura de código de barras.
-* Disponibilizar informações estratégicas através de relatórios.
+* Centralizar o cadastro de produtos perecíveis.
+* Controlar a validade por lote, e não apenas por produto.
+* Organizar os produtos por categoria e fabricante.
+* Identificar o usuário que realizou cada entrada de lote.
+* Criar a base para alertas e relatórios de vencimento.
 
 ---
 
 ## ✨ Funcionalidades
 
-### 📦 Gestão de Produtos
+### 👤 Usuários e Acesso
 
-* Cadastro de produtos
-* Edição de produtos
-* Exclusão de produtos
-* Consulta de produtos
-* Controle de estoque
-* Cadastro de fornecedores
-* Cadastro de código de barras
+* Cadastro, edição, consulta e exclusão de usuários
+* Acesso ao sistema por meio do id do usuário
 
-### 📅 Gestão de Lotes e Validade
+### 🏭 Fabricantes
 
-* Cadastro de lotes
-* Controle de validade por lote
-* Associação de lote ao produto
-* Histórico de movimentações
+* Cadastro, edição, consulta e exclusão de fabricantes
 
-### 📲 Aplicativo Mobile
+### 🗂 Categorias
 
-* Leitura de código de barras
-* Consulta rápida de produtos
-* Cadastro de lote
-* Cadastro de validade
-* Consulta de estoque
-* Interface otimizada para smartphones e tablets Android
+* Cadastro, edição, consulta e exclusão de categorias
+* Exemplos: bazar, têxtil, padaria
 
-### 🚨 Alertas Inteligentes
+### 📦 Produtos
 
-Sistema configurável de alertas para produtos:
+* Cadastro, edição, consulta e exclusão de produtos
+* Cada produto possui código de barras, categoria e fabricante
 
-* Próximos do vencimento
-* Vencidos
-* Com estoque baixo
+### 📅 Entrada de Lote
 
-O usuário poderá definir quantos dias antes do vencimento deseja receber notificações.
-
-Exemplo:
-
-Produto: Pão Integral
-
-Validade média: 45 dias
-
-Configuração do usuário:
-
-* Alertar quando restarem 15 dias para o vencimento.
+* Seleção do produto
+* Registro do número do lote e da validade
+* Registro do usuário que realizou a entrada
+* Consulta dos lotes e validades registrados
 
 ---
 
-## 📊 Relatórios
+## 🔄 Fluxo de Funcionamento
 
-O sistema permitirá a geração de diversos relatórios, como:
-
-* Produtos vencidos
-* Produtos próximos ao vencimento
-* Produtos por fornecedor
-* Produtos por marca
-* Produtos por categoria
-* Produtos por setor
-* Produtos por período
-* Estoque atual
-* Produtos por lote
-
-Todos os relatórios poderão ser filtrados conforme necessidade do usuário.
+1. Cadastro do usuário e acesso ao sistema.
+2. Cadastro de fabricantes e categorias.
+3. Cadastro do produto, com código de barras, categoria e fabricante.
+4. Entrada de lote, informando produto, lote e validade.
 
 ---
 
 ## 🏗 Arquitetura
 
-O sistema será dividido em dois módulos principais.
+Aplicação em camadas, com separação entre cliente e servidor.
 
 ### Backend
 
-Responsável por:
-
 * API REST
 * Regras de negócio
-* Autenticação
-* Controle de estoque
-* Processamento de alertas
-* Persistência dos dados
+* Persistência dos dados com Hibernate/JPA
 
 ### Frontend
 
-Responsável por:
-
-* Interface do usuário
-* Dashboards
-* Relatórios
-* Cadastro de produtos
-* Gestão de lotes
+* Interface web em Angular
+* Telas de cadastro e listagem
 * Consumo da API
 
-### Mobile
+### Banco de Dados
 
-Aplicação Android para:
-
-* Leitura de código de barras
-* Cadastro de produtos
-* Cadastro de validade
-* Consulta rápida
+* PostgreSQL
 
 ---
 
@@ -146,16 +101,12 @@ Aplicação Android para:
 
 ### Banco de Dados
 
-* Microsoft SQL Server
+* PostgreSQL
 
 ### Infraestrutura
 
-* AWS
-* Nginx
-
-### Mobile
-
-* Android
+* Execução em ambiente local
+* Disponibilização na internet via [ngrok](https://ngrok.com)
 
 ---
 
@@ -177,45 +128,19 @@ Aplicação Android para:
 │   ├── services
 │   └── models
 │
-├── mobile
-│   ├── app
-│   └── scanner
-│
 └── database
-    ├── scripts
-    └── migrations
+    └── scripts
 ```
 
 ---
 
-## 🔄 Fluxo de Funcionamento
-
-1. Cadastro do produto.
-2. Cadastro do lote.
-3. Registro da validade.
-4. Atualização do estoque.
-5. Monitoramento automático.
-6. Geração de alertas.
-7. Emissão de relatórios.
-
----
-
-## 📈 Futuras Implementações
-
-* Dashboard com indicadores em tempo real.
-* Integração com leitores industriais.
-* Notificações Push.
-* QR Code.
-* Integração com ERPs.
-* Inteligência Artificial para previsão de perdas.
-* API pública para integração com outros sistemas.
-* Controle de inventário.
-* Auditoria de movimentações.
-* Multiempresa.
-
----
-
 ## 🚀 Como Executar
+
+### Banco de Dados
+
+1. Criar um banco no PostgreSQL.
+2. Executar os scripts da pasta `/database`, se houver.
+3. Configurar a conexão no arquivo `application.properties`.
 
 ### Backend
 
@@ -239,11 +164,15 @@ npm install
 ng serve
 ```
 
-### Banco de Dados
+### Acesso pela internet (opcional)
 
-1. Criar um banco no SQL Server.
-2. Executar os scripts da pasta `/database`.
-3. Configurar a conexão no arquivo `application.properties`.
+Com o sistema rodando localmente, o ngrok cria um endereço público temporário:
+
+```bash
+ngrok http <porta-da-aplicacao>
+```
+
+O endereço gerado muda a cada execução, por isso o ngrok é indicado apenas para demonstração e testes.
 
 ---
 
@@ -253,16 +182,27 @@ ng serve
 * Maven
 * Node.js
 * Angular CLI
-* SQL Server
+* PostgreSQL
 * Git
+* ngrok (opcional)
+
+---
+
+## 📈 Próximas Implementações
+
+* Alertas de produtos próximos do vencimento e vencidos, com antecedência configurável pelo usuário
+* Dashboard com os produtos em risco
+* Relatórios por período, categoria e fabricante
+* Controle de quantidade em estoque
+* Aplicativo Android com leitura de código de barras pela câmera
+* Implantação em nuvem (AWS) com endereço fixo
+* Integração com ERPs
 
 ---
 
 ## 📖 Metodologia
 
-O projeto é desenvolvido utilizando práticas ágeis, com foco em entregas incrementais e melhoria contínua.
-
-Metodologias utilizadas:
+O projeto é desenvolvido com práticas ágeis, com foco em entregas incrementais e melhoria contínua.
 
 * Scrum (Solo Scrum)
 * Kanban
@@ -273,7 +213,7 @@ Metodologias utilizadas:
 
 **Christopher Ryuhei Nitta**
 
-Projeto desenvolvido como proposta de um Sistema de Gestão de Produtos Perecíveis para o setor varejista e indústria alimentícia.
+Projeto desenvolvido como Trabalho de Conclusão de Curso, com a proposta de um Sistema de Gestão de Produtos Perecíveis para o setor varejista e a indústria alimentícia.
 
 ---
 

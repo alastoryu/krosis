@@ -13,7 +13,8 @@ $radius: 14px;
 }
 
 .entrada-page {
-  min-height: 100vh;
+  min-height: 100%;
+  box-sizing: border-box;
   background: $surface;
   display: flex;
   align-items: flex-start;

@@ -44,7 +44,7 @@ services/
 No arquivo produto.service.ts, ajuste a URL da API:
 
 typescript
-private readonly API_URL = 'http://localhost:8080/api/produtos'; // Sua URL aqui
+private readonly API_URL = 'http://localhost:8081/api/produtos'; // Sua URL aqui
 3. Interface do Produto
 A interface Produto está definida como:
 

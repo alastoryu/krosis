@@ -5,19 +5,19 @@ $accent: #4fc3f7;
 
 .footer-bar {
   background: $bg;
-  border-top: 1px solid rgba($accent, .1);
-  height: 48px;
+  border-top: 1px solid rgba($accent, 0.1);
+  height: var(--footer-h, 48px);
   display: flex;
   align-items: center;
   padding: 0 1.25rem;
   position: fixed;
-  bottom: 0; left: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
   z-index: 1000;
 
   @media (max-width: 768px) {
     padding: 0 1rem;
-    height: 44px;
   }
 }
 
